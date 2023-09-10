@@ -19,13 +19,13 @@ export default function Counter(props: SharedProps) {
     let timer: number;
     timer = setTimeout(async () => {
       // TODO: add the upload code here
-    });
+    }, 5000);
 
     window.onclick = () => {
       clearTimeout(timer);
       timer = setTimeout(async () => {
         // Upload code goes here
-      })
+      }, 5000);
     }
   }
   return (

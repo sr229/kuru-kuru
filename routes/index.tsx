@@ -2,7 +2,7 @@ import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import { useSignal } from "@preact/signals";
 
-const currentGlobalCount = await getGlobalStatistics();
+const currentGlobalCount = getGlobalStatistics();
 
 export default function Home() {
   // to clear some confusion here:
