@@ -14,9 +14,19 @@ export default function Counter(props: SharedProps) {
     props.localCount.value += 1;
     props.hasClicked.value = true;
 
-    console.log("localCount", props.localCount.value);
-    console.log("globalCount", props.globalCount.value);
-    console.log("hasClicked", props.hasClicked.value);
+    // set a timer to update the global count, resetting
+    // whenever a user activity is detected
+    let timer: number;
+    timer = setTimeout(async () => {
+      // TODO: add the upload code here
+    });
+
+    window.onclick = () => {
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        // Upload code goes here
+      })
+    }
   }
   return (
     <div class="max-w-sm text-center rounded overflow-hidden">
