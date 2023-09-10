@@ -39,7 +39,7 @@ export const handler: Handlers = {
   }
 }
 
-export default function Home(data: number) {
+export default function Home(data: string) {
   const hasClicked = useSignal(false);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
@@ -49,7 +49,9 @@ export default function Home(data: number) {
           Try updating this message in the
           <code class="mx-2">./routes/index.tsx</code> file, and refresh.
         </p>
-        <Counter hasClicked={hasClicked}/>
+        <Counter 
+        globalCount={data}
+        hasClicked={hasClicked}/>
       </div>
     </div>
   );

@@ -4,10 +4,10 @@ import { useState, useEffect } from "preact/hooks";
 
 interface SharedProps {
   hasClicked: Signal<boolean>;
+  globalCount: string;
 }
 
 export default function Counter(props: SharedProps) {
-  const globalCount = useState(0);
   const count = useState(0);
   const onClick = () => {
 
@@ -55,7 +55,7 @@ export default function Counter(props: SharedProps) {
         <Button onClick={onClick}>Squish that button</Button>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <p>Everyone has clicked the button {globalCount} times!</p>
+        <p>Everyone has clicked the button {parseInt(props.globalCount)} times!</p>
       </div>
     </div>
   );
