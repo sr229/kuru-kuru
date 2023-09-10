@@ -1,17 +1,46 @@
+import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import { useSignal } from "@preact/signals";
 
-const currentGlobalCount = getGlobalStatistics();
+export const handler: Handlers = {
+  GET: async (req, ctx) => {
+    const accept = req.headers.get("accept");
 
-export default function Home() {
-  // to clear some confusion here:
-  // count is the publicly visible count
-  // localCount is the count that is used internally to update the global count
-  const count = useSignal(0);
-  const localCount = useSignal(0);
+    if (accept?.includes("text/event-stream")) {
+      const bc = new BroadcastChannel("global-count");
+      const body = new ReadableStream({
+        start(controller) {
+          bc.addEventListener("message", () => {
+            try {
+              const data = getGlobalStatistics();
+              controller.enqueue(`${data}`);
+            } catch (e) {
+              console.error(`Error while getting global statistics: ${e}`);
+            }
+
+            console.log(`Opened statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
+          });
+        },
+        cancel() {
+          bc.close();
+          console.log(`Closed statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
+        }
+      });
+      return new Response(body, {
+        headers: {
+          "Content-Type": "text/event-stream",
+        },
+      });
+    }
+
+    const res = await ctx.render(getGlobalStatistics());
+    return res;
+  }
+}
+
+export default function Home(data: number) {
   const hasClicked = useSignal(false);
-  const globalCount = useSignal(!currentGlobalCount ? currentGlobalCount : 0);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
@@ -20,12 +49,7 @@ export default function Home() {
           Try updating this message in the
           <code class="mx-2">./routes/index.tsx</code> file, and refresh.
         </p>
-        <Counter
-          count={count}
-          localCount={localCount}
-          globalCount={globalCount}
-          hasClicked={hasClicked}
-        />
+        <Counter hasClicked={hasClicked}/>
       </div>
     </div>
   );

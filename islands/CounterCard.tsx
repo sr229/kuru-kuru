@@ -1,18 +1,15 @@
 import type { Signal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
+import { useState, useEffect } from "preact/hooks";
 
 interface SharedProps {
-  count: Signal<number>;
-  localCount: Signal<number>;
-  globalCount: Signal<number>;
   hasClicked: Signal<boolean>;
 }
 
 export default function Counter(props: SharedProps) {
+  const globalCount = useState(0);
+  const count = useState(0);
   const onClick = () => {
-    props.count.value += 1;
-    props.localCount.value += 1;
-    props.hasClicked.value = true;
 
     // set a timer to update the global count, resetting
     // whenever a user activity is detected
@@ -28,17 +25,37 @@ export default function Counter(props: SharedProps) {
       }, 5000);
     }
   }
+
+  useEffect(() => {
+    let es = new EventSource(window.location.href);
+
+    es.addEventListener("open", () => {
+      console.log("Connected to statistics stream");
+    })
+
+    es.addEventListener("message", (e) => {
+    });
+
+    // TODO: Reconnect backoff logic could be improved
+    es.addEventListener("error", () => {
+      console.warn("Disconnected from statistics stream, attempting to reconnect...");
+      const backoff = 1000 + Math.random() * 5000;
+      new Promise((resolve) => setTimeout(resolve, backoff));
+      es = new EventSource(window.location.href);
+    })
+  }, [])
+
   return (
     <div class="max-w-sm text-center rounded overflow-hidden">
       <div class="px-6 py-4">
-        <p class="text-3xl">{props.count}</p>
+        <p class="text-3xl">{count}</p>
         <p class="text-gray-700 text-base">Times clicked</p>
       </div>
       <div class="px-6 pt-4 pb-2">
         <Button onClick={onClick}>Squish that button</Button>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <p>Everyone has clicked the button {props.globalCount} times!</p>
+        <p>Everyone has clicked the button {globalCount} times!</p>
       </div>
     </div>
   );
