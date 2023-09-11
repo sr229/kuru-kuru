@@ -42,18 +42,18 @@ export default function Counter(props: SharedProps) {
     let es = new EventSource(window.location.href);
 
     es.addEventListener("open", () => {
-      console.log(`[${new Date()}] Connected to statistics stream`);
+      console.log(`Connected to statistics stream`);
     });
 
     es.addEventListener("message", (e) => {
-      console.log(`[${new Date()}] Received global count: ${e.data}`);
+      console.log(` Received global count: ${e.data}`);
       props.globalCount = e.data;
     });
 
     // TODO: Reconnect backoff logic could be improved
     es.addEventListener("error", () => {
       console.warn(
-        `[${new Date()}] Disconnected from statistics stream, attempting to reconnect...`,
+        `Disconnected from statistics stream, attempting to reconnect...`,
       );
       const backoff = 1000 + Math.random() * 5000;
       new Promise((resolve) => setTimeout(resolve, backoff));

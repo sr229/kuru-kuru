@@ -13,7 +13,7 @@ export const handler: Handlers = {
         start(controller) {
           bc.addEventListener("message", () => {
             try {
-              controller.enqueue(getGlobalStatistics.toString());
+              controller.enqueue(new TextEncoder().encode(getGlobalStatistics().toString()));
             } catch (e) {
               console.error(`[${new Date()}] Error while getting global statistics: ${e}`);
             }
@@ -39,11 +39,13 @@ export const handler: Handlers = {
     const body = await req.json();
     setGlobalStatistics(body.data);
 
-    // broadcast new value to everyone
     const bc = new BroadcastChannel("global-count");
-    bc.postMessage(getGlobalStatistics().toString());
+    bc.postMessage(new TextEncoder().encode(getGlobalStatistics().toString()))
 
-    return Response.json({ success: true })
+    return new Response("", {
+      status: 200,
+      statusText: "OK"
+    })
   }
 }
 
