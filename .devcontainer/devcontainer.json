@@ -1,6 +1,7 @@
 {
   "image": "mcr.microsoft.com/devcontainers/base:debian",
   "features": {
+    "ghcr.io/codesandbox/devcontainer-features/codesandbox:latest": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "nonFreePackages": true,
       "upgradePackages": true
