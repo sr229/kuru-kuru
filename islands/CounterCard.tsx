@@ -10,25 +10,31 @@ interface SharedProps {
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
+  const [internalCount, setInternalCount] = useState(0)
+
   const onClick = () => {
-    let internalCount = 0
     let timer: number;
 
     // set a timer to update the global count, resetting
     // whenever a user activity is detected
-    internalCount += 1;
+
+    setInternalCount(internalCount + 1)
     setCount(count + 1);
 
     timer = setTimeout(() => {
+      console.info(`[${new Date()}] Updating global count: ${internalCount}`);
       axios.post(window.location.href, JSON.stringify({data: internalCount}));
-      internalCount = 0;
+
+      setInternalCount(0);
     }, 5000);
 
     window.onclick = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
+        console.info(`[${new Date()}] Updating global count: ${internalCount}`);
         axios.post(window.location.href, JSON.stringify({data: internalCount}));
-        internalCount = 0;
+
+        setInternalCount(0);
       }, 5000);
     }
   }
