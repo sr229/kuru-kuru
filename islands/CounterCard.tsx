@@ -1,7 +1,7 @@
 import type { Signal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
-import { useState, useEffect } from "preact/hooks";
-import axios from 'axios-web';
+import { useEffect, useState } from "preact/hooks";
+import axios from "axios-web";
 
 interface SharedProps {
   hasClicked: Signal<boolean>;
@@ -10,41 +10,40 @@ interface SharedProps {
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
-  const [internalCount, setInternalCount] = useState(0)
+  const [internalCount, setInternalCount] = useState(0);
 
   const onClick = () => {
-    let timer: number;
+    setInternalCount(internalCount + 1);
+    setCount(count + 1);
+  };
 
+  useEffect(() => {
     // set a timer to update the global count, resetting
     // whenever a user activity is detected
-
-    setInternalCount(internalCount + 1)
-    setCount(count + 1);
-
-    timer = setTimeout(() => {
-      console.info(`[${new Date()}] Updating global count: ${internalCount}`);
-      axios.post(window.location.href, JSON.stringify({data: internalCount}));
-
-      setInternalCount(0);
-    }, 5000);
+    let timer: number;
 
     window.onclick = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        console.info(`[${new Date()}] Updating global count: ${internalCount}`);
-        axios.post(window.location.href, JSON.stringify({data: internalCount}));
+        console.info(
+          `[${new Date()}] Updating global count: ${internalCount + 1}`,
+        );
+        axios.post(
+          window.location.href,
+          JSON.stringify({ data: internalCount + 1 }),
+        );
 
         setInternalCount(0);
       }, 5000);
-    }
-  }
+    };
+  });
 
   useEffect(() => {
     let es = new EventSource(window.location.href);
 
     es.addEventListener("open", () => {
       console.log(`[${new Date()}] Connected to statistics stream`);
-    })
+    });
 
     es.addEventListener("message", (e) => {
       console.log(`[${new Date()}] Received global count: ${e.data}`);
@@ -53,12 +52,14 @@ export default function Counter(props: SharedProps) {
 
     // TODO: Reconnect backoff logic could be improved
     es.addEventListener("error", () => {
-      console.warn(`[${new Date()}] Disconnected from statistics stream, attempting to reconnect...`);
+      console.warn(
+        `[${new Date()}] Disconnected from statistics stream, attempting to reconnect...`,
+      );
       const backoff = 1000 + Math.random() * 5000;
       new Promise((resolve) => setTimeout(resolve, backoff));
       es = new EventSource(window.location.href);
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <div class="max-w-sm text-center rounded overflow-hidden">
@@ -70,7 +71,9 @@ export default function Counter(props: SharedProps) {
         <Button onClick={onClick}>Squish that button</Button>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <p>Everyone has clicked the button {parseInt(props.globalCount)} times!</p>
+        <p>
+          Everyone has clicked the button {parseInt(props.globalCount)} times!
+        </p>
       </div>
     </div>
   );
