@@ -7,7 +7,7 @@
       "upgradePackages": true
     }
   },
-"postCreateCommand": "curl -fsSL https://deno.land/x/install/install.sh | sh",
+"postStartCommand": "curl -fsSL https://deno.land/x/install/install.sh | sh",
 "customizations": {
 	"vscode": {
 		"extensions": [
