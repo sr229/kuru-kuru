@@ -6,14 +6,17 @@
     "ghcr.io/devcontainers/features/common-utils:2": {
       "nonFreePackages": true,
       "upgradePackages": true
+    },
+    "ghcr.io/nmemoto/devcontainer-features/deno:1": {
+      "version": "latest"
     }
   },
-"customizations": {
-	"vscode": {
-		"extensions": [
-			"sastan.twind-intellisense",
-			"denoland.vscode-deno"
-		]
-	}
-}
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "sastan.twind-intellisense",
+        "denoland.vscode-deno"
+      ]
+    }
+  }
 }
