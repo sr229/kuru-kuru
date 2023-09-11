@@ -42,13 +42,14 @@ export const handler: Handlers = {
     // broadcast new value to everyone
     const bc = new BroadcastChannel("global-count");
     bc.postMessage(getGlobalStatistics().toString());
-    
+
     return Response.json({ success: true })
   }
 }
 
-export default function Home(data: string) {
+export default function Home() {
   const hasClicked = useSignal(false);
+  const globalCount = useSignal(0);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
@@ -58,7 +59,7 @@ export default function Home(data: string) {
           <code class="mx-2">./routes/index.tsx</code> file, and refresh.
         </p>
         <Counter
-        globalCount={data}
+        globalCount={globalCount}
         hasClicked={hasClicked}/>
       </div>
     </div>

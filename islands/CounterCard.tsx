@@ -5,7 +5,7 @@ import axios from "axios-web";
 
 interface SharedProps {
   hasClicked: Signal<boolean>;
-  globalCount: string;
+  globalCount: Signal<number>;
 }
 
 export default function Counter(props: SharedProps) {
@@ -72,7 +72,7 @@ export default function Counter(props: SharedProps) {
       </div>
       <div class="px-6 pt-4 pb-2">
         <p>
-          Everyone has clicked the button {parseInt(props.globalCount)} times!
+          Everyone has clicked the button {props.globalCount} times!
         </p>
       </div>
     </div>
