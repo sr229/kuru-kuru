@@ -1,6 +1,7 @@
 import type { Signal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
 import { useState, useEffect } from "preact/hooks";
+import axios from 'axios-web';
 
 interface SharedProps {
   hasClicked: Signal<boolean>;
@@ -8,20 +9,26 @@ interface SharedProps {
 }
 
 export default function Counter(props: SharedProps) {
-  const count = useState(0);
+  const [count, setCount] = useState(0);
   const onClick = () => {
+    let internalCount = 0
+    let timer: number;
 
     // set a timer to update the global count, resetting
     // whenever a user activity is detected
-    let timer: number;
-    timer = setTimeout(async () => {
-      // TODO: add the upload code here
+    internalCount += 1;
+    setCount(count + 1);
+
+    timer = setTimeout(() => {
+      axios.post(window.location.href, JSON.stringify({data: internalCount}));
+      internalCount = 0;
     }, 5000);
 
     window.onclick = () => {
       clearTimeout(timer);
-      timer = setTimeout(async () => {
-        // Upload code goes here
+      timer = setTimeout(() => {
+        axios.post(window.location.href, JSON.stringify({data: internalCount}));
+        internalCount = 0;
       }, 5000);
     }
   }
@@ -34,6 +41,8 @@ export default function Counter(props: SharedProps) {
     })
 
     es.addEventListener("message", (e) => {
+      console.log(`[${new Date()}] Received global count: ${e.data}`);
+      props.globalCount = e.data;
     });
 
     // TODO: Reconnect backoff logic could be improved
