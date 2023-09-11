@@ -16,15 +16,14 @@ export const handler: Handlers = {
               const data = getGlobalStatistics();
               controller.enqueue(`${data}`);
             } catch (e) {
-              console.error(`Error while getting global statistics: ${e}`);
+              console.error(`[${new Date()}] Error while getting global statistics: ${e}`);
             }
-
-            console.log(`Opened statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
           });
+          console.log(`[${new Date()}] Opened statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
         },
         cancel() {
           bc.close();
-          console.log(`Closed statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
+          console.log(`[${new Date()}] Closed statistics stream for ${JSON.stringify(ctx.remoteAddr)}`);
         }
       });
       return new Response(body, {
@@ -36,6 +35,9 @@ export const handler: Handlers = {
 
     const res = await ctx.render(getGlobalStatistics());
     return res;
+  },
+  POST: async (req, ctx) => {
+    const body = await req.json();
   }
 }
 
@@ -49,7 +51,7 @@ export default function Home(data: string) {
           Try updating this message in the
           <code class="mx-2">./routes/index.tsx</code> file, and refresh.
         </p>
-        <Counter 
+        <Counter
         globalCount={data}
         hasClicked={hasClicked}/>
       </div>
