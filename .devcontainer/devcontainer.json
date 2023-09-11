@@ -3,10 +3,18 @@
   "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/devcontainers-community/features/deno:1": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "nonFreePackages": true,
       "upgradePackages": true
     }
-  }
+  },
+"postCreateCommand": "curl -fsSL https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | DENO_INSTALL=/usr/local sudo -E sh",
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"sastan.twind-intellisense",
+			"denoland.vscode-deno"
+		]
+	}
+}
 }
