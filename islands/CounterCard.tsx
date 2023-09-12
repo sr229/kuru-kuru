@@ -5,11 +5,12 @@ import axios from "axios-web";
 
 interface SharedProps {
   hasClicked: Signal<boolean>;
-  globalCount: Signal<number>;
+  globalCount: number;
 }
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
+  const [globalCount, setGlobalCount] = useState(props.globalCount);
   const [internalCount, setInternalCount] = useState(0);
 
   const onClick = () => {
@@ -21,6 +22,11 @@ export default function Counter(props: SharedProps) {
     // set a timer to update the global count, resetting
     // whenever a user activity is detected
     let timer: number;
+
+    timer = setTimeout(() => {
+      axios.post(window.location.href, JSON.stringify({ data: internalCount }));
+      setInternalCount(0);
+    }, 5000)
 
     window.onclick = () => {
       clearTimeout(timer);
@@ -47,7 +53,8 @@ export default function Counter(props: SharedProps) {
 
     es.addEventListener("message", (e) => {
       console.log(` Received global count: ${e.data}`);
-      props.globalCount = e.data;
+      const data = JSON.parse(e.data);
+      setGlobalCount(parseInt(data.globalCount));
     });
 
     // TODO: Reconnect backoff logic could be improved
@@ -72,7 +79,7 @@ export default function Counter(props: SharedProps) {
       </div>
       <div class="px-6 pt-4 pb-2">
         <p>
-          Everyone has clicked the button {props.globalCount} times!
+          Everyone has clicked the button {globalCount} times!
         </p>
       </div>
     </div>

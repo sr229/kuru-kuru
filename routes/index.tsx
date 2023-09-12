@@ -3,6 +3,10 @@ import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import { useSignal } from "@preact/signals";
 
+interface GlobalCountData {
+  globalCount: number;
+}
+
 export const handler: Handlers = {
   GET: async (req, ctx) => {
     const accept = req.headers.get("accept");
@@ -13,7 +17,9 @@ export const handler: Handlers = {
         start(controller) {
           bc.addEventListener("message", () => {
             try {
-              controller.enqueue(new TextEncoder().encode(getGlobalStatistics().toString()));
+              const data = getGlobalStatistics();
+              const chunk = `data: ${JSON.stringify({globalCount: data})}\n\n`;
+              controller.enqueue(new TextEncoder().encode(chunk));
             } catch (e) {
               console.error(`[${new Date()}] Error while getting global statistics: ${e}`);
             }
@@ -31,8 +37,8 @@ export const handler: Handlers = {
         },
       });
     }
-
-    const res = await ctx.render(getGlobalStatistics());
+    const data = getGlobalStatistics();
+    const res = await ctx.render({globalCount: data});
     return res;
   },
   POST: async (req, ctx) => {
@@ -49,9 +55,8 @@ export const handler: Handlers = {
   }
 }
 
-export default function Home() {
+export default function Home({ globalCount }: GlobalCountData) {
   const hasClicked = useSignal(false);
-  const globalCount = useSignal(!getGlobalStatistics() && isNaN(getGlobalStatistics()) ? getGlobalStatistics() : 0);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
