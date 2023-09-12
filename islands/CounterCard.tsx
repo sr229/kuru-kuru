@@ -23,11 +23,6 @@ export default function Counter(props: SharedProps) {
     // whenever a user activity is detected
     let timer: number;
 
-    timer = setTimeout(() => {
-      axios.post(window.location.href, JSON.stringify({ data: internalCount }));
-      setInternalCount(0);
-    }, 5000)
-
     window.onclick = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
