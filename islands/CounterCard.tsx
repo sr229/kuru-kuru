@@ -10,7 +10,7 @@ interface SharedProps {
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
-  const [globalCount, setGlobalCount] = useState(props.globalCount);
+  const [globalCount, setGlobalCount] = useState(props.globalCount ?? 0);
   const [internalCount, setInternalCount] = useState(0);
 
   const onClick = () => {

@@ -15,9 +15,9 @@ export const handler: Handlers = {
       const bc = new BroadcastChannel("global-count");
       const body = new ReadableStream({
         start(controller) {
-          bc.addEventListener("message", () => {
+          bc.addEventListener("message", async () => {
             try {
-              const data = getGlobalStatistics();
+              const data = await getGlobalStatistics();
               const chunk = `data: ${JSON.stringify({globalCount: data})}\n\n`;
               controller.enqueue(new TextEncoder().encode(chunk));
             } catch (e) {
@@ -43,7 +43,7 @@ export const handler: Handlers = {
   },
   POST: async (req, ctx) => {
     const body = await req.json();
-    setGlobalStatistics(body.data);
+    await setGlobalStatistics(body.data);
 
     const bc = new BroadcastChannel("global-count");
     bc.postMessage(new TextEncoder().encode(getGlobalStatistics().toString()))
