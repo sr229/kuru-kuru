@@ -103,7 +103,7 @@ export default function Counter(props: SharedProps) {
   return (
     <div class="max-w-sm text-center rounded overflow-hidden z-10">
       <div class="px-6 py-4">
-        <p class="text-3xl text-white">{count}</p>
+        <p class="text-3xl text-white">{count.toLocaleString()}</p>
         <p class="text-gray-700 text-gray-100">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
@@ -111,7 +111,7 @@ export default function Counter(props: SharedProps) {
       </div>
       <div class="px-6 pt-4 pb-2 text-white">
         <p>
-          Everyone has squished the kuru {globalCount} times!
+          Everyone has squished the kuru {globalCount.toLocaleString()} times!
         </p>
       </div>
     </div>
