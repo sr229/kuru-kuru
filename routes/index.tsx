@@ -1,5 +1,6 @@
 import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
+import Footer from "../islands/Footer.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language

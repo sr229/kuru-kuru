@@ -1,4 +1,5 @@
 import { AppProps } from "$fresh/server.ts";
+import Footer from "../islands/Footer.tsx";
 
 export default function App({ Component }: AppProps) {
   return (
@@ -11,6 +12,7 @@ export default function App({ Component }: AppProps) {
       <body>
         <Component />
       </body>
+      <Footer />
     </html>
   );
 }
