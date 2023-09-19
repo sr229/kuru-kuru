@@ -6,7 +6,8 @@ import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished
 const kuruAudio: string[] = [];
-const mdData = await Deno.readTextFile("README.md");
+// also hardcodeed for now
+const mdData = await Deno.readTextFile("home_content/en.md");
 
 // iterate inside ../static/assets/audio/ja/ and add all files to the array
 for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
