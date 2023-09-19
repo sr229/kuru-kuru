@@ -1,5 +1,4 @@
 import { Handlers } from "$fresh/server.ts";
-import { useSignal } from "https://esm.sh/v132/@preact/signals@1.1.3/X-ZS8q/dist/signals.js";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 
