@@ -11,10 +11,7 @@ export default function Footer() {
           <a href="https://github.com/sr229/kuru-kuru" class="mr-4 hover:underline md:mr-6">GitHub Repo</a>
         </li>
         <li>
-          <a href="https://github.com/sponsors/sr229" class="mr-4 hover:underline md:mr-6">Support the Developer</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Discord</a>
+          <a href="https://duiqt.github.io/herta_kuru/" class="mr-4 hover:underline md:mr-6">Visit the original!</a>
         </li>
       </ul>
     </footer>

@@ -84,10 +84,11 @@ export default function Home(
     <div>
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]" id="mascot-tgt">
         <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
+          <img src="/favicon.png" width="60px" />
           <h1 class="text-4xl text-white font-bold z-10">
             Welcome to herta kuru (v2?)
           </h1>
-          <p class="my-4 text-white z-10">
+          <p class="my-4 font-bold text-white z-10">
             The website for Herta, the <del>annoying</del>{" "}
             cutest genius Honkai: Star Rail character out there.
           </p>
@@ -98,8 +99,11 @@ export default function Home(
         </div>
       </div>
       <div class="px-4 py-8 mx-auto bg-white items-center justify-center">
-        <style dangerouslySetInnerHTML={{__html: CSS}}/>
-        <div class="markdown-body" dangerouslySetInnerHTML={{ __html: render(mdData) }}>
+        <style dangerouslySetInnerHTML={{ __html: CSS }} />
+        <div
+          class="markdown-body"
+          dangerouslySetInnerHTML={{ __html: render(mdData) }}
+        >
         </div>
       </div>
     </div>
