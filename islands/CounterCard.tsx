@@ -19,14 +19,15 @@ export function animateMascot() {
   const reversalSpeed = 100 - Math.floor(scrollSpeed);
   const counterButton = document.getElementById("ctr-btn") as HTMLElement;
   const mascotEl = document.createElement("img");
+  const parentEl = document.getElementById("mascot-tgt") as HTMLElement;
 
   mascotEl.src = `/assets/img/hertaa${mascotId}.gif`;
   mascotEl.style.position = "absolute";
   mascotEl.style.right = "-500px";
   mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY -
     430 + "px";
-  mascotEl.style.zIndex = "0";
-  document.body.appendChild(mascotEl);
+  mascotEl.classList.add("z-[-1]");
+  parentEl.appendChild(mascotEl);
 
   let pos = -500;
   const limit = window.innerWidth + 500;
@@ -49,7 +50,7 @@ export default function Counter(props: SharedProps) {
   const [internalCount, setInternalCount] = useState(0);
   const [timer, setTimer] = useState(0);
 
-  const onClick = (evt: MouseEvent) => {
+  const onClick = () => {
     setInternalCount(internalCount + 1);
     setCount(count + 1);
     animateMascot();
@@ -93,15 +94,15 @@ export default function Counter(props: SharedProps) {
   }, []);
 
   return (
-    <div class="max-w-sm text-center rounded overflow-hidden">
+    <div class="max-w-sm text-center rounded overflow-hidden z-10">
       <div class="px-6 py-4">
-        <p class="text-3xl">{count}</p>
-        <p class="text-gray-700 text-base">Times the kuru was squished~</p>
+        <p class="text-3xl text-white">{count}</p>
+        <p class="text-gray-700 text-gray-100">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
         <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
       </div>
-      <div class="px-6 pt-4 pb-2">
+      <div class="px-6 pt-4 pb-2 text-white">
         <p>
           Everyone has squished the kuru {globalCount} times!
         </p>
