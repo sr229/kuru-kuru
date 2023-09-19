@@ -105,14 +105,14 @@ export default function Counter(props: SharedProps) {
     <div class="max-w-sm text-center rounded overflow-hidden">
       <div class="px-6 py-4">
         <p class="text-3xl">{count}</p>
-        <p class="text-gray-700 text-base">Times clicked</p>
+        <p class="text-gray-700 text-base">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <Button id="ctr-btn" onClick={onClick}>Squish that button</Button>
+        <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
       </div>
       <div class="px-6 pt-4 pb-2">
         <p>
-          Everyone has clicked the button {globalCount} times!
+          Everyone has squished the kuru {globalCount} times!
         </p>
       </div>
     </div>
