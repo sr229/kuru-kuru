@@ -14,17 +14,18 @@ interface SharedProps {
 export function animateMascot() {
   // create a new element to animate
   let id = 0;
-  const mascotId = Math.floor(Math.random() *  2) + 1;
+  const mascotId = Math.floor(Math.random() * 2) + 1;
   const scrollSpeed = Math.floor(Math.random() * 30) + 20;
-  const reversalSpeed= 100 - Math.floor(scrollSpeed);
+  const reversalSpeed = 100 - Math.floor(scrollSpeed);
   const counterButton = document.getElementById("ctr-btn") as HTMLElement;
   const mascotEl = document.createElement("img");
 
   mascotEl.src = `/assets/img/hertaa${mascotId}.gif`;
   mascotEl.style.position = "absolute";
   mascotEl.style.right = "-500px";
-  mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY - 430 + "px";
-  mascotEl.style.zIndex = "-5";
+  mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY -
+    430 + "px";
+  mascotEl.style.zIndex = "0";
   document.body.appendChild(mascotEl);
 
   let pos = -500;
@@ -36,46 +37,36 @@ export function animateMascot() {
       clearInterval(id);
       mascotEl.remove();
     } else {
-      pos += Math.floor(window.innerWidth/ reversalSpeed);
+      pos += Math.floor(window.innerWidth / reversalSpeed);
       mascotEl.style.right = pos + "px";
     }
   }, 12);
-
-
 }
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
   const [globalCount, setGlobalCount] = useState(props.globalCount ?? 0);
   const [internalCount, setInternalCount] = useState(0);
+  const [timer, setTimer] = useState(0);
 
   const onClick = (evt: MouseEvent) => {
     setInternalCount(internalCount + 1);
     setCount(count + 1);
     animateMascot();
+
+    clearTimeout(timer);
+    setTimer(setTimeout(() => {
+      console.info(
+        `[${new Date()}] Updating global count: ${internalCount + 1}`,
+      );
+      axios.post(
+        window.location.href,
+        JSON.stringify({ data: internalCount + 1 }),
+      );
+
+      setInternalCount(0);
+    }, 5000));
   };
-
-
-  useEffect(() => {
-    // set a timer to update the global count, resetting
-    // whenever a user activity is detected
-    let timer: number;
-
-    window.onclick = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        console.info(
-          `[${new Date()}] Updating global count: ${internalCount + 1}`,
-        );
-        axios.post(
-          window.location.href,
-          JSON.stringify({ data: internalCount + 1 }),
-        );
-
-        setInternalCount(0);
-      }, 5000);
-    };
-  });
 
   useEffect(() => {
     let es = new EventSource(window.location.href);
