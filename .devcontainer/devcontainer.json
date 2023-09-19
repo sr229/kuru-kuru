@@ -1,5 +1,5 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/codesandbox/devcontainer-features/codesandbox:latest": {},
     "ghcr.io/progamesigner/devcontainers/features/deno:latest": {},
@@ -13,10 +13,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "sastan.twind-intellisense",
-        "denoland.vscode-deno"
-      ]
+      "extensions": ["sastan.twind-intellisense", "denoland.vscode-deno"]
     }
   }
 }

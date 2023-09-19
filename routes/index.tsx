@@ -37,7 +37,7 @@ export const handler: Handlers = {
         },
       });
     }
-    const data = getGlobalStatistics();
+    const data = await getGlobalStatistics();
     const res = await ctx.render({globalCount: data});
     return res;
   },
@@ -55,7 +55,7 @@ export const handler: Handlers = {
   }
 }
 
-export default function Home({ globalCount }: GlobalCountData) {
+export default function Home({ data: { globalCount } }: { data: { globalCount: number }}) {
   const hasClicked = useSignal(false);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
