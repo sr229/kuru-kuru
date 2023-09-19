@@ -8,15 +8,53 @@ interface SharedProps {
   globalCount: number;
 }
 
+/**
+ * Scrolls the mascot from right to left relative to the viewport
+ */
+export function animateMascot() {
+  // create a new element to animate
+  let id = 0;
+  const mascotId = Math.floor(Math.random() *  2) + 1;
+  const scrollSpeed = Math.floor(Math.random() * 30) + 20;
+  const reversalSpeed= 100 - Math.floor(scrollSpeed);
+  const counterButton = document.getElementById("ctr-btn") as HTMLElement;
+  const mascotEl = document.createElement("img");
+
+  mascotEl.src = `/assets/img/hertaa${mascotId}.gif`;
+  mascotEl.style.position = "absolute";
+  mascotEl.style.right = "-500px";
+  mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY - 430 + "px";
+  mascotEl.style.zIndex = "-10";
+  document.body.appendChild(mascotEl);
+
+  let pos = -500;
+  const limit = window.innerWidth + 500;
+  clearInterval(id);
+
+  id = setInterval(() => {
+    if (pos >= limit) {
+      clearInterval(id);
+      mascotEl.remove();
+    } else {
+      pos += Math.floor(window.innerWidth/ reversalSpeed);
+      mascotEl.style.right = pos + "px";
+    }
+  }, 12);
+
+
+}
+
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
   const [globalCount, setGlobalCount] = useState(props.globalCount ?? 0);
   const [internalCount, setInternalCount] = useState(0);
 
-  const onClick = () => {
+  const onClick = (evt: MouseEvent) => {
     setInternalCount(internalCount + 1);
     setCount(count + 1);
+    animateMascot();
   };
+
 
   useEffect(() => {
     // set a timer to update the global count, resetting
@@ -70,7 +108,7 @@ export default function Counter(props: SharedProps) {
         <p class="text-gray-700 text-base">Times clicked</p>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <Button onClick={onClick}>Squish that button</Button>
+        <Button id="ctr-btn" onClick={onClick}>Squish that button</Button>
       </div>
       <div class="px-6 pt-4 pb-2">
         <p>
