@@ -1,10 +1,17 @@
 import { Handlers } from "$fresh/server.ts";
+import { useSignal } from "https://esm.sh/v132/@preact/signals@1.1.3/X-ZS8q/dist/signals.js";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
-import { useSignal } from "@preact/signals";
 
-interface GlobalCountData {
-  globalCount: number;
+// TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
+// and we want to randomly play one of them when the mascot is squished
+const kuruAudio: string[] = []
+
+// iterate inside ../static/assets/audio/ja/ and add all files to the array
+for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
+  if (f.isDirectory) continue;
+  // replace file paths with /assets/audio/ja/filename.mp3
+  kuruAudio.push(`/assets/audio/ja/${f.name}`);
 }
 
 export const handler: Handlers = {
@@ -56,7 +63,6 @@ export const handler: Handlers = {
 }
 
 export default function Home({ data: { globalCount } }: { data: { globalCount: number }}) {
-  const hasClicked = useSignal(false);
   return (
     <div class="px-4 py-8 mx-auto bg-[#9d88d3]" id="mascot-tgt">
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
@@ -67,7 +73,7 @@ export default function Home({ data: { globalCount } }: { data: { globalCount: n
         </p>
         <Counter
         globalCount={globalCount}
-        hasClicked={hasClicked}/>
+        audioFiles={kuruAudio}/>
       </div>
     </div>
   );

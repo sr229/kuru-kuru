@@ -1,11 +1,11 @@
-import type { Signal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
 import axios from "axios-web";
+import { Signal } from "@preact/signals-core";
 
 interface SharedProps {
-  hasClicked: Signal<boolean>;
   globalCount: number;
+  audioFiles : string[];
 }
 
 /**
@@ -54,6 +54,14 @@ export default function Counter(props: SharedProps) {
     setInternalCount(internalCount + 1);
     setCount(count + 1);
     animateMascot();
+    
+
+    const audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
+    const audio = new Audio(audioFile);
+    audio.play();
+
+    
+
 
     clearTimeout(timer);
     setTimer(setTimeout(() => {
