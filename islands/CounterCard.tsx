@@ -1,7 +1,6 @@
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
 import axios from "axios-web";
-import { Signal } from "@preact/signals-core";
 
 interface SharedProps {
   globalCount: number;
