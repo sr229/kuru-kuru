@@ -53,13 +53,10 @@ export default function Counter(props: SharedProps) {
     setInternalCount(internalCount + 1);
     setCount(count + 1);
     animateMascot();
-    
 
     const audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
     const audio = new Audio(audioFile);
-    audio.play();
-
-    
+    audio.play();    
 
 
     clearTimeout(timer);
