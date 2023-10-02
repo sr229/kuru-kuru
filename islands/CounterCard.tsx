@@ -62,7 +62,7 @@ export default function Counter(props: SharedProps) {
     clearTimeout(timer);
     setTimer(setTimeout(() => {
       console.info(
-        `[${new Date()}] Updating global count: ${internalCount}`,
+        `[${new Date()}] Updating global count: ${internalCount + 1}`,
       );
       axios.post(
         window.location.href,
