@@ -1,5 +1,7 @@
 ## Herta Kuru (v2)!
 
+[Visit the Site](https://kuru-kuru.deno.dev/) | [Check who's visiting it too!](https://takeback.bysourfruit.com/tracked/kuru-kuru.deno.dev)
+
 This is a proof-of-concept implementation of [duiqt/herta_kuru](https://github.com/duiqt/herta_kuru) with a global statistics feed, this time, it's a little more secure!
 
 ### Background
