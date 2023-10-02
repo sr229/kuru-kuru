@@ -98,7 +98,7 @@ export default function Home(
           />
         </div>
       </div>
-      <div class="px-4 py-8 mx-auto bg-white items-center justify-center">
+      <div class="px-4 py-8 aspect-square mx-8 my-8 bg-white items-center justify-center">
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <div
           class="markdown-body"
