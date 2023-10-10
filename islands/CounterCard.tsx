@@ -54,9 +54,21 @@ export default function Counter(props: SharedProps) {
     setCount(count + 1);
     animateMascot();
 
-    const audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
-    const audio = new Audio(audioFile);
-    audio.play();    
+    let audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
+    let lastAudioPlayed = audioFile;
+    const audio = new Audio();
+    
+    // Check if the audio file is the same as the last one played
+    // If so, pick another one
+    if (lastAudioPlayed === audioFile) {
+      audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
+      lastAudioPlayed = audioFile;
+      audio.src = audioFile;
+    } else {
+      audio.src = audioFile;
+    }
+
+    audio.play();
 
 
     clearTimeout(timer);
