@@ -24,7 +24,7 @@ export function animateMascot() {
   mascotEl.style.position = "absolute";
   mascotEl.style.right = "-500px";
   mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY -
-    430 + "px";
+    412 + "px";
   mascotEl.classList.add("z-[-1]");
   parentEl.appendChild(mascotEl);
 
