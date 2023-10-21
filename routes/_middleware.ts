@@ -7,6 +7,7 @@ export async function handler(req: Request, ctx: MiddlewareHandlerContext) {
 
   headers.set("Access-Control-Allow-Origin", origin);
   headers.set("Access-Control-Allow-Credentials", "true");
+  headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Cache-Control", "public, max-age=3600");
   headers.set(
     "Access-Control-Allow-Headers",
