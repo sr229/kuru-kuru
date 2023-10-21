@@ -85,10 +85,10 @@ export default function Home(
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]" id="mascot-tgt">
         <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
           <img class="z-10" src="/favicon.png" width="60px" />
-          <h1 class="text-4xl text-white font-bold z-10">
+          <h1 class="text-4xl text-white text-center font-bold z-10">
             Welcome to herta kuru (v2?)
           </h1>
-          <p class="my-4 font-bold text-white z-10">
+          <p class="my-4 font-bold text-center text-white z-10">
             The website for Herta, the <del>annoying</del>{" "}
             cutest genius Honkai: Star Rail character out there.
           </p>
