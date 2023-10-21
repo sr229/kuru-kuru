@@ -25,7 +25,7 @@ export function animateMascot() {
   mascotEl.style.right = "-500px";
   mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY -
     412 + "px";
-  mascotEl.classList.add("z-[-1]");
+  mascotEl.classList.add("z-[0]");
   parentEl.appendChild(mascotEl);
 
   let pos = -500;
@@ -113,7 +113,7 @@ export default function Counter(props: SharedProps) {
     <div class="max-w-sm text-center rounded overflow-hidden z-10">
       <div class="px-6 py-4">
         <p class="text-3xl text-white">{count.toLocaleString()}</p>
-        <p class="text-gray-700 text-gray-100">Times the kuru was squished~</p>
+        <p class="text-gray-100">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
         <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
