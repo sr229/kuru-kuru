@@ -6,7 +6,7 @@ import * as $0 from "./routes/_404.tsx";
 import * as $1 from "./routes/_app.tsx";
 import * as $2 from "./routes/index.tsx";
 import * as $$0 from "./islands/CounterCard.tsx";
-import * as $$1 from "./islands/Footer.tsx";
+import * as $$1 from "./components/Footer.tsx";
 
 const manifest = {
   routes: {
