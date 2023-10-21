@@ -21,11 +21,11 @@ export function animateMascot() {
   const parentEl = document.getElementById("mascot-tgt") as HTMLElement;
 
   mascotEl.src = `/assets/img/hertaa${mascotId}.gif`;
-  mascotEl.style.position = "absolute";
   mascotEl.style.right = "-500px";
-  mascotEl.style.top = counterButton.getClientRects()[0].bottom + scrollY -
-    412 + "px";
-  mascotEl.classList.add("z-[0]");
+  mascotEl.style.opacity = "60%";
+  mascotEl.style.top = counterButton.getClientRects()[0].top + scrollY -
+    408 + "px";
+  mascotEl.classList.add("z-[0]", "absolute", "bg-scroll");
   parentEl.appendChild(mascotEl);
 
   let pos = -500;

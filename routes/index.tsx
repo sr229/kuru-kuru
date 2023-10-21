@@ -2,6 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { CSS, render } from "$gfm";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
+import MarkdownContent from "../islands/MarkdownContent.tsx";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished
@@ -82,11 +83,11 @@ export default function Home(
   // added a pseudo-div here so I can nest another div inside it smh
   return (
     <div>
-      <div class="px-4 py-8 mx-auto bg-[#9d88d3]" id="mascot-tgt">
-        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
+      <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
+        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center" id="mascot-tgt">
           <img class="z-10" src="/favicon.png" width="60px" />
           <h1 class="text-4xl text-white text-center font-bold z-10">
-            Welcome to herta kuru (v2?)
+            Welcome to herta kuru
           </h1>
           <p class="my-4 font-bold text-center text-white z-10">
             The website for Herta, the <del>annoying</del>{" "}
@@ -97,14 +98,7 @@ export default function Home(
             audioFiles={kuruAudio}
           />
         </div>
-      </div>
-      <div class="px-4 py-8 aspect-square mx-8 my-8 bg-white items-center justify-center">
-        <style dangerouslySetInnerHTML={{ __html: CSS }} />
-        <div
-          class="markdown-body"
-          dangerouslySetInnerHTML={{ __html: render(mdData) }}
-        >
-        </div>
+        <MarkdownContent mdData={mdData} />
       </div>
     </div>
   );
