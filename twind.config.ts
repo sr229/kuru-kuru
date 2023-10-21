@@ -1,5 +1,10 @@
-import { Options } from "$fresh/plugins/twind.ts";
+import { defineConfig, Preset } from "twind";
+import presetTailwind from "@twind/preset-tailwind";
+import presetAutoprefix from "@twind/preset-autoprefix";
 
 export default {
-  selfURL: import.meta.url
-} as Options;
+  ...defineConfig({
+    presets: [presetTailwind() as Preset, presetAutoprefix()],
+  }),
+  selfURL: import.meta.url,
+};
