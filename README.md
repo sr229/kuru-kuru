@@ -12,7 +12,6 @@ finding a way to implement it, until I got bored, and then I picked it up again.
 The new system I implemented works using the following:
 
 - Using `BroadcastChannel`s - we can send SSEs to update the counter, and it only updates on mutation, so this is practically realtime.
-- No websockets, everything is done using Server Sent Events (SSEs) using event streams.
 - No API is actually exposed to the user, so no one can just take the statistics endpoint and just spam it, because the statistics server is also the website.
 - POSTing to the API is delayed by 5000ms (5s) before its submitted to the API in the frontend. While the provider does allow this, its due diligence to only submit it when there's inactivity.
 
