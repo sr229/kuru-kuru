@@ -12,7 +12,7 @@ export default function App({ Component }: AppProps) {
         <meta property="og:url" content="https://herta.deno.dev" />
         <meta
           property="og:description"
-          content="The website for Herta, the cutest genius Honkai: Star Rail character out there"
+          content="The website for Herta, the cutest genius Honkai: Star Rail character out there."
         />
         <meta property="og:type" content="website" />
         <meta
