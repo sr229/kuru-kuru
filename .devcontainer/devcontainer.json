@@ -1,10 +1,9 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
   "features": {
     "ghcr.io/codesandbox/devcontainer-features/codesandbox:latest": {},
     "ghcr.io/progamesigner/devcontainers/features/deno:latest": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
-      "nonFreePackages": true,
       "upgradePackages": true
     },
     "ghcr.io/nmemoto/devcontainer-features/deno:1": {
