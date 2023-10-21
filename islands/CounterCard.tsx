@@ -89,11 +89,11 @@ export default function Counter(props: SharedProps) {
     let es = new EventSource(window.location.href);
 
     es.addEventListener("open", () => {
-      console.log(`Connected to statistics stream`);
+      console.log(`[${new Date()}] Connected to statistics stream`);
     });
 
     es.addEventListener("message", (e) => {
-      console.log(` Received global count: ${e.data}`);
+      console.log(`[${new Date()}] Received global count: ${e.data}`);
       const data = JSON.parse(e.data);
       setGlobalCount(parseInt(data.globalCount));
     });
