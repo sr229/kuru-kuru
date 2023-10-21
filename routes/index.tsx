@@ -55,7 +55,7 @@ export const handler: Handlers = {
       });
       return new Response(body, {
         headers: {
-          "Content-Type": "text/event-stream",
+          "Content-Type": "text/event-stream; charset=utf-8",
         },
       });
     }
