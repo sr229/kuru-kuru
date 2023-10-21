@@ -101,7 +101,7 @@ export default function Counter(props: SharedProps) {
     // TODO: Reconnect backoff logic could be improved
     es.addEventListener("error", () => {
       console.warn(
-        `Disconnected from statistics stream, attempting to reconnect...`,
+        `[${new Date()}] Disconnected from statistics stream, attempting to reconnect...`,
       );
       const backoff = 1000 + Math.random() * 5000;
       new Promise((resolve) => setTimeout(resolve, backoff));
