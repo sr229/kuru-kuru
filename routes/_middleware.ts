@@ -7,7 +7,7 @@ export async function handler(req: Request, ctx: MiddlewareHandlerContext) {
 
   headers.set("Access-Control-Allow-Origin", origin);
   headers.set("Access-Control-Allow-Credentials", "true");
-  headers.set("Cache-Control", "public, max-age=14400, must-revalidate");
+  headers.set("Cache-Control", "public, max-age=14400");
   headers.set(
     "Access-Control-Allow-Headers",
     "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
