@@ -2,7 +2,7 @@ import { CSS, render } from "$gfm";
 
 export default function MarkdownContent({ mdData }: { mdData: string }) {
   return (
-    <div class="px-4 py-8 aspect-square mx-8 my-8 bg-white items-center justify-center">
+    <div class="flex mx-auto flex-col px-4 py-8 aspect-auto bg-white rounded items-center z-20">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <div
         class="markdown-body"

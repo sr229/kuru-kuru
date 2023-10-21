@@ -83,11 +83,11 @@ export default function Home(
   // added a pseudo-div here so I can nest another div inside it smh
   return (
     <div>
-      <div class="px-4 py-8 mx-auto bg-[#9d88d3]" id="mascot-tgt">
-        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
+      <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
+        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center" id="mascot-tgt">
           <img class="z-10" src="/favicon.png" width="60px" />
           <h1 class="text-4xl text-white text-center font-bold z-10">
-            Welcome to herta kuru (v2?)
+            Welcome to herta kuru
           </h1>
           <p class="my-4 font-bold text-center text-white z-10">
             The website for Herta, the <del>annoying</del>{" "}
