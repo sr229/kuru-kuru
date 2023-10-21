@@ -2,6 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { CSS, render } from "$gfm";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
+import MarkdownContent from "../islands/MarkdownContent.tsx";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished
@@ -97,14 +98,7 @@ export default function Home(
             audioFiles={kuruAudio}
           />
         </div>
-      </div>
-      <div class="px-4 py-8 aspect-square mx-8 my-8 bg-white items-center justify-center">
-        <style dangerouslySetInnerHTML={{ __html: CSS }} />
-        <div
-          class="markdown-body"
-          dangerouslySetInnerHTML={{ __html: render(mdData) }}
-        >
-        </div>
+        <MarkdownContent mdData={mdData} />
       </div>
     </div>
   );
