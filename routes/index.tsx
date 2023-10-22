@@ -34,7 +34,6 @@ export const handler: Handlers = {
       };
 
       bc.addEventListener("message", (e) => {
-        console.log(e);
         socket.send(JSON.stringify({ globalCount: e.data }));
       });
 
