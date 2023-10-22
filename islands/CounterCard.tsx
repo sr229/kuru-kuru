@@ -4,7 +4,7 @@ import axios from "axios-web";
 
 interface SharedProps {
   globalCount: number;
-  audioFiles : string[];
+  audioFiles: string[];
 }
 
 /**
@@ -54,14 +54,16 @@ export default function Counter(props: SharedProps) {
     setCount(count + 1);
     animateMascot();
 
-    let audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
+    let audioFile =
+      props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
     let lastAudioPlayed = audioFile;
     const audio = new Audio();
-    
+
     // Check if the audio file is the same as the last one played
     // If so, pick another one
     if (lastAudioPlayed === audioFile) {
-      audioFile = props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
+      audioFile =
+        props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
       lastAudioPlayed = audioFile;
       audio.src = audioFile;
     } else {
@@ -70,18 +72,26 @@ export default function Counter(props: SharedProps) {
 
     audio.play();
 
-
     clearTimeout(timer);
     setTimer(setTimeout(() => {
       console.info(
         `[${new Date()}] Updating global count: ${internalCount + 1}`,
       );
-      axios.post(
-        window.location.href,
-        JSON.stringify({ data: internalCount + 1 }),
-      );
 
-      setInternalCount(0);
+      // guard against numbers that are beyond MAX_SAFE_INTEGER.
+      if (internalCount === Number.MAX_SAFE_INTEGER) {
+        console.warn(
+          "Data too large to be submitted and represented safely. Disposing.",
+        );
+        setCount(0);
+        setInternalCount(0);
+      } else {
+        axios.post(
+          window.location.href,
+          JSON.stringify({ data: internalCount + 1 }),
+        );
+        setInternalCount(0);
+      }
     }, 5000));
   };
 
