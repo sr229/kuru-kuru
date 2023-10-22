@@ -74,10 +74,6 @@ export default function Counter(props: SharedProps) {
 
     clearTimeout(timer);
     setTimer(setTimeout(() => {
-      console.info(
-        `[${new Date()}] Updating global count: ${internalCount + 1}`,
-      );
-
       // guard against numbers that are beyond MAX_SAFE_INTEGER.
       if (internalCount === Number.MAX_SAFE_INTEGER) {
         console.warn(
@@ -89,6 +85,9 @@ export default function Counter(props: SharedProps) {
         axios.post(
           window.location.href,
           JSON.stringify({ data: internalCount + 1 }),
+        );
+        console.info(
+          `[${new Date()}] Updating global count: ${internalCount + 1}`,
         );
         setInternalCount(0);
       }
