@@ -34,6 +34,7 @@ export const handler: Handlers = {
       };
 
       bc.addEventListener("message", (e) => {
+        console.log(e);
         socket.send(JSON.stringify({ globalCount: e.data }));
       });
 
@@ -57,7 +58,7 @@ export const handler: Handlers = {
 
       return response;
     }
-    
+
     const data = await getGlobalStatistics();
     const res = await ctx.render({ globalCount: data });
     return res;
@@ -65,9 +66,11 @@ export const handler: Handlers = {
   POST: async (req, ctx) => {
     const body = await req.json();
     await setGlobalStatistics(body.data);
+    
+    const updatedCount = await getGlobalStatistics();
 
     const bc = new BroadcastChannel("global-count");
-    bc.postMessage(new TextEncoder().encode(getGlobalStatistics().toString()));
+    bc.postMessage(updatedCount.toString());
 
     return new Response("", {
       status: 200,
