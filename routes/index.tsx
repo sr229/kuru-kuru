@@ -1,6 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
-import { CSS, render } from "$gfm";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import MarkdownContent from "../islands/MarkdownContent.tsx";
 
@@ -19,46 +18,47 @@ for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
 
 export const handler: Handlers = {
   GET: async (req, ctx) => {
-    const accept = req.headers.get("accept");
+    let bc = new BroadcastChannel("global-count");
 
-    if (accept?.includes("text/event-stream")) {
-      const bc = new BroadcastChannel("global-count");
-      const body = new ReadableStream({
-        start(controller) {
-          bc.addEventListener("message", async () => {
-            try {
-              const data = await getGlobalStatistics();
-              const chunk = `data: ${
-                JSON.stringify({ globalCount: data })
-              }\n\n`;
-              controller.enqueue(new TextEncoder().encode(chunk));
-            } catch (e) {
-              console.error(
-                `[${new Date()}] Error while getting global statistics: ${e}`,
-              );
-            }
-          });
-          console.log(
-            `[${new Date()}] Opened statistics stream for ${
-              JSON.stringify(ctx.remoteAddr)
-            }`,
-          );
-        },
-        cancel() {
-          bc.close();
-          console.log(
-            `[${new Date()}] Closed statistics stream for ${
-              JSON.stringify(ctx.remoteAddr)
-            }`,
-          );
-        },
+    // check if we're requesting wss:// or ws://, add the response header accordingly
+    if (req.headers.get("upgrade") === "websocket") {
+      const { socket, response } = Deno.upgradeWebSocket(req);
+
+      socket.onopen = () => {
+        bc = new BroadcastChannel("global-count");
+        console.log(
+          `[${new Date().toISOString()}] Connection opened for ${
+            JSON.stringify(ctx.remoteAddr)
+          }`,
+        );
+      };
+
+      bc.addEventListener("message", (e) => {
+        console.log(e);
+        socket.send(JSON.stringify({ globalCount: e.data }));
       });
-      return new Response(body, {
-        headers: {
-          "Content-Type": "text/event-stream; charset=utf-8",
-        },
-      });
+
+      socket.onclose = () => {
+        bc.close();
+        console.log(
+          `[${new Date().toISOString()}] Connection closed for ${
+            JSON.stringify(ctx.remoteAddr)
+          }`,
+        );
+      };
+
+      socket.onerror = (e) => {
+        bc.close();
+        console.error(
+          `[${new Date().toISOString()}] Connection errored for ${
+            JSON.stringify(ctx.remoteAddr)
+          }: ${e}`,
+        );
+      };
+
+      return response;
     }
+
     const data = await getGlobalStatistics();
     const res = await ctx.render({ globalCount: data });
     return res;
@@ -66,9 +66,11 @@ export const handler: Handlers = {
   POST: async (req, ctx) => {
     const body = await req.json();
     await setGlobalStatistics(body.data);
+    
+    const updatedCount = await getGlobalStatistics();
 
     const bc = new BroadcastChannel("global-count");
-    bc.postMessage(new TextEncoder().encode(getGlobalStatistics().toString()));
+    bc.postMessage(updatedCount.toString());
 
     return new Response("", {
       status: 200,
@@ -84,7 +86,10 @@ export default function Home(
   return (
     <div>
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
-        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center" id="mascot-tgt">
+        <div
+          class="max-w-screen-md mx-auto flex flex-col items-center justify-center"
+          id="mascot-tgt"
+        >
           <img class="z-10" src="/favicon.png" width="60px" />
           <h1 class="text-4xl text-white text-center font-bold z-10">
             Welcome to herta kuru
