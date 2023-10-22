@@ -36,6 +36,7 @@ export default function App({ Component }: AppProps) {
       </head>
       <body>
         <Component />
+        <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "da71f3cc23af449aa491996d8d2d1eb5"}'></script>
       </body>
       <Footer />
     </html>
