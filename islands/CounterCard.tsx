@@ -89,7 +89,7 @@ export default function Counter(props: SharedProps) {
           JSON.stringify({ data: internalCount + 1 }),
         );
         console.info(
-          `[${new Date()}] Updating global count: ${internalCount + 1}`,
+          `[${new Date().toISOString()}] Updating global count: ${internalCount + 1}`,
         );
         setInternalCount(0);
       }
@@ -97,27 +97,26 @@ export default function Counter(props: SharedProps) {
   };
 
   useEffect(() => {
-    let es = new EventSource(window.location.href);
+    let ws = new WebSocket(window.location.href.replace("http", "ws"));
 
-    es.addEventListener("open", () => {
-      console.log(`[${new Date()}] Connected to statistics stream`);
+    ws.addEventListener("open", () => {
+      console.log(`[${new Date().toISOString()}] Connected to statistics socket`);
     });
 
-    es.addEventListener("message", (e) => {
-      console.log(`[${new Date()}] Received global count: ${e.data}`);
+    ws.addEventListener("message", (e) => {
+      console.log(`[${new Date().toISOString()}] Received global count: ${e.data}`);
       const data = JSON.parse(e.data);
       setGlobalCount(BigInt(parseInt(data.globalCount)));
     });
 
-    // TODO: Reconnect backoff logic could be improved
-    es.addEventListener("error", () => {
+    ws.addEventListener("error", () => {
       console.warn(
-        `[${new Date()}] Disconnected from statistics stream, attempting to reconnect...`,
+        `[${new Date().toISOString()}] Disconnected from statistics socket, attempting to reconnect...`,
       );
       const backoff = 1000 + Math.random() * 5000;
       new Promise((resolve) => setTimeout(resolve, backoff));
-      es = new EventSource(window.location.href);
-    });
+      ws = new WebSocket(window.location.href.replace("http", "ws"));
+    })
   }, []);
 
   return (
