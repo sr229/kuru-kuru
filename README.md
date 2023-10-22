@@ -1,6 +1,6 @@
 ## Herta Kuru (v2)!
 
-[Visit the Site](https://herta.sr229.cf/) | [Check who's visiting it too!](https://takeback.bysourfruit.com/tracked/kuru-kuru.deno.dev) | [Open in CodeSandbox](https://githubbox.com/sr229/kuru-kuru)
+[Visit the Site](https://herta.deno.dev/) | [Check who's visiting it too!](https://takeback.bysourfruit.com/tracked/kuru-kuru.deno.dev) | [Open in CodeSandbox](https://githubbox.com/sr229/kuru-kuru)
 
 This is a proof-of-concept implementation of [duiqt/herta_kuru](https://github.com/duiqt/herta_kuru) with a global statistics feed, this time, it's a little more secure!
 
