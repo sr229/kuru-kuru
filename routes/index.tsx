@@ -78,7 +78,7 @@ export const handler: Handlers = {
 };
 
 export default function Home(
-  { data: { globalCount } }: { data: { globalCount: number } },
+  { data: { globalCount } }: { data: { globalCount: bigint } },
 ) {
   // added a pseudo-div here so I can nest another div inside it smh
   return (

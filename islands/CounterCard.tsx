@@ -3,7 +3,7 @@ import { useEffect, useState } from "preact/hooks";
 import axios from "axios-web";
 
 interface SharedProps {
-  globalCount: number;
+  globalCount: bigint;
   audioFiles: string[];
 }
 
