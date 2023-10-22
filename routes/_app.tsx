@@ -9,7 +9,7 @@ export default function App({ Component }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta property="og:title" content="Kuru Kuru~" />
         <meta property="og:site_name" content="Kuru Kuru~" />
-        <meta property="og:url" content="https://herta.deno.dev" />
+        <meta property="og:url" content="https://herta.sr229.cf" />
         <meta
           property="og:description"
           content="The website for Herta, the cutest genius Honkai: Star Rail character out there."
@@ -17,7 +17,7 @@ export default function App({ Component }: AppProps) {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://herta.deno.dev/assets/img/hertaa1.gif"
+          content="https://herta.sr229.cf/assets/img/hertaa1.gif"
         />
         <meta name="title" content="Herta Kuru" />
         <meta
@@ -30,7 +30,7 @@ export default function App({ Component }: AppProps) {
         />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
-        <meta name="canonical" content="https://herta.deno.dev/" />
+        <meta name="canonical" content="https://herta.sr229.cf/" />
         <script src="https://takeback.bysourfruit.com/api/kit/7NHKHAQY12LGE1WUP9Z806" />
         <title>Kuru kuru~!</title>
       </head>
