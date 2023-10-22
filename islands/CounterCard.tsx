@@ -45,7 +45,9 @@ export function animateMascot() {
 
 export default function Counter(props: SharedProps) {
   const [count, setCount] = useState(0);
-  const [globalCount, setGlobalCount] = useState(props.globalCount ?? 0);
+  const [globalCount, setGlobalCount] = useState(
+    BigInt(props.globalCount ?? 0),
+  );
   const [internalCount, setInternalCount] = useState(0);
   const [timer, setTimer] = useState(0);
 
@@ -104,7 +106,7 @@ export default function Counter(props: SharedProps) {
     es.addEventListener("message", (e) => {
       console.log(`[${new Date()}] Received global count: ${e.data}`);
       const data = JSON.parse(e.data);
-      setGlobalCount(parseInt(data.globalCount));
+      setGlobalCount(BigInt(parseInt(data.globalCount)));
     });
 
     // TODO: Reconnect backoff logic could be improved
