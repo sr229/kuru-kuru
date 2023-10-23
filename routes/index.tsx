@@ -74,6 +74,17 @@ export const handler: Handlers = {
   },
   POST: async (req, ctx) => {
     const body = await req.json();
+    const headers = req.headers;
+
+    // check if useragent is a browser
+    // we can use the Sec-Ch-Ua header but it's not supported by all browsers
+    if (!headers.get("sec-ch-ua")) {
+      return new Response("", {
+        status: 403,
+        statusText: "Forbidden",
+      });
+    }
+
     await setGlobalStatistics(body.data);
     
     const updatedCount = await getGlobalStatistics();
