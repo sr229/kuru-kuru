@@ -21,15 +21,6 @@ export const handler: Handlers = {
     let bc = new BroadcastChannel("global-count");
     const headers = req.headers;
 
-    // check if useragent is a browser
-    // we can use the Sec-Fetch-Mode header but it's not supported by all browsers
-    if (!headers.get("sec-fetch-mode")) {
-      return new Response("", {
-        status: 403,
-        statusText: "Forbidden",
-      });
-    }
-
     // check if we're requesting wss:// or ws://, then upgrade as necessary
     if (headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
