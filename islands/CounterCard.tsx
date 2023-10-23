@@ -89,34 +89,65 @@ export default function Counter(props: SharedProps) {
           JSON.stringify({ data: internalCount + 1 }),
         );
         console.info(
-          `[${new Date().toISOString()}] Updating global count: ${internalCount + 1}`,
+          `[${new Date().toISOString()}] Updating global count: ${
+            internalCount + 1
+          }`,
         );
         setInternalCount(0);
       }
     }, 5000));
   };
 
-  useEffect(() => {
-    let ws = new WebSocket(window.location.href.replace("http", "ws"));
+  const handleWSEvents = (ws: WebSocket) => {
+    ws.onopen = () => {
+      console.log(
+        `[${new Date().toISOString()}] Connected to statistics socket`,
+      );
+    };
 
-    ws.addEventListener("open", () => {
-      console.log(`[${new Date().toISOString()}] Connected to statistics socket`);
-    });
-
-    ws.addEventListener("message", (e) => {
-      console.log(`[${new Date().toISOString()}] Received global count: ${e.data}`);
+    ws.onmessage = (e) => {
+      console.log(
+        `[${new Date().toISOString()}] Received global count: ${e.data}`,
+      );
       const data = JSON.parse(e.data);
       setGlobalCount(BigInt(parseInt(data.globalCount)));
+    };
+
+    ws.onclose = () => {
+      console.warn(`[${new Date().toISOString()}] Disconnected from statistics socket.`,);
+    };
+
+    ws.onerror = (e) => {
+      console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`,);
+    };
+  }
+
+  useEffect(() => {
+    let ws = new WebSocket(window.location.href.replace("http", "ws"));
+    handleWSEvents(ws);
+
+    const onlineHandler = () => {
+      console.log("Client detected online, resuming connection.");
+      ws = new WebSocket(window.location.href.replace("http", "ws"));
+      handleWSEvents(ws);
+    };
+
+    const offlineHandler = () => {
+      console.warn("Client detected offline!");
+      ws.close();
+    };
+
+    globalThis.window.addEventListener("online", onlineHandler);
+    globalThis.window.addEventListener("offline", offlineHandler);
+    globalThis.window.addEventListener("beforeunload", () => {
+      ws.close();
     });
 
-    ws.addEventListener("error", () => {
-      console.warn(
-        `[${new Date().toISOString()}] Disconnected from statistics socket, attempting to reconnect...`,
-      );
-      const backoff = 1000 + Math.random() * 5000;
-      new Promise((resolve) => setTimeout(resolve, backoff));
-      ws = new WebSocket(window.location.href.replace("http", "ws"));
-    })
+    return () => {
+      globalThis.window.removeEventListener("online", onlineHandler);
+      globalThis.window.removeEventListener("offline", offlineHandler);
+      ws.close();
+    };
   }, []);
 
   return (
