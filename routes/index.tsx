@@ -42,6 +42,11 @@ export const handler: Handlers = {
         }
       });
 
+      socket.onmessage = (e) => {
+        // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
+        if (e.data === 0x0.toString()) socket.send(0x1.toString());
+      }
+
       socket.onclose = () => {
         bc.close();
         console.log(

@@ -99,6 +99,22 @@ export default function Counter(props: SharedProps) {
   };
 
   const handleWSEvents = (ws: WebSocket) => {
+    const heartbeatFunc = (fName: number) => {
+      if (ws.readyState === 1) ws.send((0x0).toString());
+      // do nothing because you can do nothing
+      else return;
+    };
+
+    const tmFunc = () => {
+      console.warn("Server is down, reconnecting...");
+      ws.close();
+      ws = new WebSocket(window.location.href.replace("http", "ws"));
+      handleWSEvents(ws);
+    };
+
+    let heartbeat = setInterval(() => heartbeatFunc(heartbeat), 15000);
+    let tm = setTimeout(tmFunc, 30000);
+
     ws.onopen = () => {
       console.log(
         `[${new Date().toISOString()}] Connected to statistics socket`,
@@ -106,24 +122,36 @@ export default function Counter(props: SharedProps) {
     };
 
     ws.onmessage = (e) => {
-      console.log(
-        `[${new Date().toISOString()}] Received global count: ${e.data}`,
-      );
-      const data = JSON.parse(e.data);
-      setGlobalCount(BigInt(parseInt(data.globalCount)));
+      switch (e.data) {
+        case (0x1).toString():
+          console.log("Received Keepalive from server.");
+          clearTimeout(tm);
+          clearInterval(heartbeat);
+
+          heartbeat = setInterval(() => heartbeatFunc(heartbeat), 15000);
+          tm = setTimeout(tmFunc, 30000);
+          break;
+        default: {
+          const data = JSON.parse(e.data);
+          setGlobalCount(BigInt(parseInt(data.globalCount)));
+        }
+      }
     };
 
     ws.onclose = () => {
-      console.warn(`[${new Date().toISOString()}] Disconnected from statistics socket.`,);
+      console.warn(
+        `[${new Date().toISOString()}] Disconnected from statistics socket.`,
+      );
     };
 
     ws.onerror = (e) => {
-      console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`,);
+      console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
     };
-  }
+  };
 
   useEffect(() => {
     let ws = new WebSocket(window.location.href.replace("http", "ws"));
+
     handleWSEvents(ws);
 
     const onlineHandler = () => {
@@ -146,6 +174,7 @@ export default function Counter(props: SharedProps) {
     return () => {
       globalThis.window.removeEventListener("online", onlineHandler);
       globalThis.window.removeEventListener("offline", offlineHandler);
+      handleWSEvents(ws);
       ws.close();
     };
   }, []);
