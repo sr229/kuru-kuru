@@ -118,8 +118,7 @@ export default function Counter(props: SharedProps) {
     };
 
     ws.onerror = (e) => {
-      console.error(`[${new Date().toISOString()}] Socket Errored. Aggressively reconnecting...`,);
-      ws = new WebSocket(window.location.href.replace("http", "ws"));
+      console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`,);
     };
   }
 
