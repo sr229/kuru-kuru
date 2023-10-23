@@ -97,6 +97,14 @@ export const handler: Handlers = {
       });
     }
 
+    // check against MAX_SAFE_INTEGER to prevent overflow
+    if (body.data >= Number.MAX_SAFE_INTEGER) {
+      return new Response("", {
+        status: 413,
+        statusText: "Payload Too Large",
+      });
+    }
+
     await setGlobalStatistics(body.data);
 
     const updatedCount = await getGlobalStatistics();
