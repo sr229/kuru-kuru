@@ -98,9 +98,7 @@ export default function Counter(props: SharedProps) {
     }, 5000));
   };
 
-  useEffect(() => {
-    let ws = new WebSocket(window.location.href.replace("http", "ws"));
-
+  const handleWSEvents = (ws: WebSocket) => {
     ws.onopen = () => {
       console.log(
         `[${new Date().toISOString()}] Connected to statistics socket`,
@@ -123,10 +121,16 @@ export default function Counter(props: SharedProps) {
       console.error(`[${new Date().toISOString()}] Socket Errored. Aggressively reconnecting...`,);
       ws = new WebSocket(window.location.href.replace("http", "ws"));
     };
+  }
+
+  useEffect(() => {
+    let ws = new WebSocket(window.location.href.replace("http", "ws"));
+    handleWSEvents(ws);
 
     const onlineHandler = () => {
       console.log("Client detected online, resuming connection.");
       ws = new WebSocket(window.location.href.replace("http", "ws"));
+      handleWSEvents(ws);
     };
 
     const offlineHandler = () => {
