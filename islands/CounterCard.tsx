@@ -92,7 +92,7 @@ export default function Counter(props: SharedProps) {
         );
         setInternalCount(0);
       }
-    }, 5000));
+    }, 2048));
   };
 
   const handleWSEvents = (ws: WebSocket) => {

@@ -87,7 +87,7 @@ export const handler: Handlers = {
     const res = await ctx.render({ globalCount: data });
     return res;
   },
-  POST: async (req, ctx) => {
+  POST: async (req) => {
     const body = await req.json();
     const headers = req.headers;
 
