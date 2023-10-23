@@ -54,7 +54,7 @@ export const handler: Handlers = {
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (reqNewCount >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
-          await setGlobalStatistics(BigInt(reqNewCount));
+          await setGlobalStatistics(reqNewCount);
 
           const newCount = await getGlobalStatistics();
           bc.postMessage(newCount.toString());
