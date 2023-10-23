@@ -19,9 +19,19 @@ for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
 export const handler: Handlers = {
   GET: async (req, ctx) => {
     let bc = new BroadcastChannel("global-count");
+    const headers = req.headers;
+
+    // check if useragent is a browser
+    // we can use the Sec-Ch-Ua header but it's not supported by all browsers
+    if (!headers.get("sec-ch-ua")) {
+      return new Response("", {
+        status: 403,
+        statusText: "Forbidden",
+      });
+    }
 
     // check if we're requesting wss:// or ws://, then upgrade as necessary
-    if (req.headers.get("upgrade") === "websocket") {
+    if (headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
 
       socket.onopen = () => {
@@ -36,7 +46,9 @@ export const handler: Handlers = {
       bc.addEventListener("message", (e) => {
         try {
           // don't send if the socket is closed
-          if (socket.readyState === 1) socket.send(JSON.stringify({ globalCount: e.data }));
+          if (socket.readyState === 1) {
+            socket.send(JSON.stringify({ globalCount: e.data }));
+          }
         } catch (e) {
           console.warn(`[${new Date().toISOString()}] ${e.stack}`);
         }
@@ -44,8 +56,8 @@ export const handler: Handlers = {
 
       socket.onmessage = (e) => {
         // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
-        if (e.data === 0x0.toString()) socket.send(0x1.toString());
-      }
+        if (e.data === (0x0).toString()) socket.send((0x1).toString());
+      };
 
       socket.onclose = () => {
         bc.close();
@@ -86,11 +98,19 @@ export const handler: Handlers = {
     }
 
     await setGlobalStatistics(body.data);
-    
-    const updatedCount = await getGlobalStatistics();
 
+    const updatedCount = await getGlobalStatistics();
     const bc = new BroadcastChannel("global-count");
     bc.postMessage(updatedCount.toString());
+
+    // log the request
+    console.log(
+      `[${
+        new Date().toISOString()
+      }] Updated global count to ${updatedCount} from ${
+        JSON.stringify(ctx.remoteAddr)
+      } (UA: ${headers.get("user-agent")})})`,
+    );
 
     return new Response("", {
       status: 200,
