@@ -50,11 +50,11 @@ export const handler: Handlers = {
         if (e.data === (0x0).toString()) {
           socket.send((0x1).toString());
         } else {
-          const reqNewCount = JSON.parse(e.data).data;
+          const reqNewCount = JSON.parse(e.data);
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
-          if (reqNewCount >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
-          await setGlobalStatistics(reqNewCount);
+          if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
+          await setGlobalStatistics(reqNewCount.data.toString());
 
           const newCount = await getGlobalStatistics();
           bc.postMessage(newCount.toString());
