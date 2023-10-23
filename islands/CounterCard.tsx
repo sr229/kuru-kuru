@@ -1,6 +1,5 @@
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
-import axios from "axios-web";
 
 interface SharedProps {
   globalCount: bigint;
@@ -50,6 +49,7 @@ export default function Counter(props: SharedProps) {
   );
   const [internalCount, setInternalCount] = useState(0);
   const [timer, setTimer] = useState(0);
+  const ipc = new BroadcastChannel("counterIpc");
 
   const onClick = () => {
     setInternalCount(internalCount + 1);
@@ -84,10 +84,7 @@ export default function Counter(props: SharedProps) {
         setCount(0);
         setInternalCount(0);
       } else {
-        axios.post(
-          window.location.href,
-          JSON.stringify({ data: internalCount + 1 }),
-        );
+        ipc.postMessage(internalCount + 1);
         console.info(
           `[${new Date().toISOString()}] Updating global count: ${
             internalCount + 1
@@ -95,7 +92,7 @@ export default function Counter(props: SharedProps) {
         );
         setInternalCount(0);
       }
-    }, 5000));
+    }, 2048));
   };
 
   const handleWSEvents = (ws: WebSocket) => {
@@ -153,6 +150,10 @@ export default function Counter(props: SharedProps) {
 
     handleWSEvents(ws);
 
+    ipc.addEventListener("message", (e) => {
+      ws.send(JSON.stringify({data: e.data}));
+    });
+
     const onlineHandler = () => {
       console.log("Client detected online, resuming connection.");
       ws = new WebSocket(window.location.href.replace("http", "ws"));
@@ -161,20 +162,20 @@ export default function Counter(props: SharedProps) {
 
     const offlineHandler = () => {
       console.warn("Client detected offline!");
-      ws.close();
+      ws!.close();
     };
 
     globalThis.window.addEventListener("online", onlineHandler);
     globalThis.window.addEventListener("offline", offlineHandler);
     globalThis.window.addEventListener("beforeunload", () => {
-      ws.close();
+      ws!.close();
     });
 
     return () => {
       globalThis.window.removeEventListener("online", onlineHandler);
       globalThis.window.removeEventListener("offline", offlineHandler);
-      handleWSEvents(ws);
-      ws.close();
+      handleWSEvents(ws!);
+      ws!.close();
     };
   }, []);
 

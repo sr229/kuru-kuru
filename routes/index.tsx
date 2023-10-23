@@ -45,9 +45,20 @@ export const handler: Handlers = {
         }
       });
 
-      socket.onmessage = (e) => {
+      socket.onmessage = async (e) => {
         // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
-        if (e.data === (0x0).toString()) socket.send((0x1).toString());
+        if (e.data === (0x0).toString()) {
+          socket.send((0x1).toString());
+        } else {
+          const reqNewCount = JSON.parse(e.data);
+
+          // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
+          if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
+          await setGlobalStatistics(reqNewCount.data);
+
+          const newCount = await getGlobalStatistics();
+          bc.postMessage(newCount.toString());
+        }
       };
 
       socket.onclose = () => {
@@ -75,7 +86,7 @@ export const handler: Handlers = {
     const res = await ctx.render({ globalCount: data });
     return res;
   },
-  POST: async (req, ctx) => {
+  POST: async (req) => {
     const body = await req.json();
     const headers = req.headers;
 
@@ -96,24 +107,10 @@ export const handler: Handlers = {
       });
     }
 
-    await setGlobalStatistics(body.data);
-
-    const updatedCount = await getGlobalStatistics();
-    const bc = new BroadcastChannel("global-count");
-    bc.postMessage(updatedCount.toString());
-
-    // log the request
-    console.log(
-      `[${
-        new Date().toISOString()
-      }] Updated global count to ${updatedCount} from ${
-        JSON.stringify(ctx.remoteAddr)
-      } (UA: ${headers.get("user-agent")})})`,
-    );
-
+    // ha you thought this is an endpoint
     return new Response("", {
-      status: 200,
-      statusText: "OK",
+      status: 410,
+      statusText: "💀",
     });
   },
 };
