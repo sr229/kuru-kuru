@@ -7,5 +7,5 @@ export async function getGlobalStatistics() {
 
 export async function setGlobalStatistics(value: bigint) {
   const pv = await getGlobalStatistics();
-  await kv.set(["global-statistics"], pv + value);
+  await kv.set(["global-statistics"], pv + BigInt(value));
 }

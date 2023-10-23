@@ -50,7 +50,6 @@ export const handler: Handlers = {
         if (e.data === (0x0).toString()) {
           socket.send((0x1).toString());
         } else {
-          console.debug(`ACK - ${e.data}`)
           const reqNewCount = BigInt(JSON.parse(e.data).data);
           await setGlobalStatistics(reqNewCount);
 
