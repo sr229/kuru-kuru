@@ -116,6 +116,7 @@ export default function Counter(props: SharedProps) {
       console.log(
         `[${new Date().toISOString()}] Connected to statistics socket`,
       );
+      ws.send(0x0.toString());
     };
 
     ws.onmessage = (e) => {
