@@ -124,7 +124,6 @@ export default function Counter(props: SharedProps) {
     ws.onmessage = (e) => {
       switch (e.data) {
         case (0x1).toString():
-          console.log("Received Keepalive from server.");
           clearTimeout(tm);
           clearInterval(heartbeat);
 
