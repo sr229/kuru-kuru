@@ -20,7 +20,7 @@ export const handler: Handlers = {
   GET: async (req, ctx) => {
     let bc = new BroadcastChannel("global-count");
 
-    // check if we're requesting wss:// or ws://, add the response header accordingly
+    // check if we're requesting wss:// or ws://, then upgrade as necessary
     if (req.headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
 
@@ -34,7 +34,12 @@ export const handler: Handlers = {
       };
 
       bc.addEventListener("message", (e) => {
-        socket.send(JSON.stringify({ globalCount: e.data }));
+        try {
+          // don't send if the socket is closed
+          if (socket.readyState === 1) socket.send(JSON.stringify({ globalCount: e.data }));
+        } catch (e) {
+          console.warn(`[${new Date().toISOString()}] ${e.stack}`);
+        }
       });
 
       socket.onclose = () => {
