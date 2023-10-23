@@ -110,7 +110,7 @@ export const handler: Handlers = {
     // ha you thought this is an endpoint
     return new Response("", {
       status: 410,
-      statusText: "💀",
+      statusText: "Gone.",
     });
   },
 };
