@@ -70,8 +70,6 @@ export default function Counter(props: SharedProps) {
         setIntervalTime(0);
         setClicksInInterval(0);
       }
-
-      console.log(intervalTime);
     }, 1000 * 1);
 
     return () => { clearInterval(intervalId) }
