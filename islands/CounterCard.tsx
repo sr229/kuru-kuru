@@ -51,7 +51,7 @@ export default function Counter(props: SharedProps) {
   const [timer, setTimer] = useState(0);
   const ipc = new BroadcastChannel("counterIpc");
 
-  const THRESHOLD_CLICKS = 10; // Maximum number of clicks in an interval
+  const THRESHOLD_CLICKS = 30; // Maximum number of clicks in an interval
   const INTERVAL_TIME_SECONDS = 60 * 0.5; // Every 2 minutes
   const [clicksInInterval, setClicksInInterval] = useState(0);
   const [intervalTime, setIntervalTime] = useState(0);
