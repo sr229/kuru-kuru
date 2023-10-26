@@ -52,28 +52,32 @@ export default function Counter(props: SharedProps) {
   const ipc = new BroadcastChannel("counterIpc");
 
   const THRESHOLD_CLICKS = 30; // Maximum number of clicks in an interval
-  const INTERVAL_TIME_SECONDS = 60 * 0.5; // Every 2 minutes
+  const INTERVAL_TIME_SECONDS = 60 * 0.5; // Every 30 seconds
   const [clicksInInterval, setClicksInInterval] = useState(0);
   const [intervalTime, setIntervalTime] = useState(0);
 
   const clickThresholdSurpassed = () => {
-    return clicksInInterval === THRESHOLD_CLICKS;
+    return clicksInInterval >= THRESHOLD_CLICKS;
   }
 
   useEffect(() => {
-    const intervalId = setTimeout(() => {
-      // Update interval time
-      setIntervalTime(prevTime => prevTime + 1);
+    if (clickThresholdSurpassed()) {
+      // Setup a timer
+      const intervalId = setTimeout(() => {
+      
+        // Update interval time
+        setIntervalTime(prevTime => prevTime + 1);
+  
+        // Reset interval if expired
+        if (intervalTime >= INTERVAL_TIME_SECONDS) {
+          setIntervalTime(0);
+          setClicksInInterval(0);
+        }
+      }, 1000 * 1);
 
-      // Reset interval if expired
-      if (intervalTime >= INTERVAL_TIME_SECONDS) {
-        setIntervalTime(0);
-        setClicksInInterval(0);
-      }
-    }, 1000 * 1);
-
-    return () => { clearInterval(intervalId) }
-  }, [intervalTime]);
+      return () => { clearInterval(intervalId) }
+    }
+  }, [clicksInInterval, intervalTime]);
 
   const onClick = () => {
     setInternalCount(internalCount + 1);
