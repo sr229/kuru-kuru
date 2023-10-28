@@ -31,7 +31,7 @@ export default function App({ Component }: AppProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
-        <script src="https://takeback.bysourfruit.com/api/kit/7NHKHAQY12LGE1WUP9Z806" />
+        <script src='https://takeback.bysourfruit.com/api/kit/SFUH0J0YOJPBWL50AMSFSS' />
         <title>Kuru kuru~!</title>
       </head>
       <body>
