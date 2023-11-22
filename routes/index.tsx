@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
-import MarkdownContent from "../islands/MarkdownContent.tsx";
+import MarkdownContent from "../components/MarkdownContent.tsx";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished

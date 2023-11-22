@@ -1,5 +1,6 @@
 import { AppProps } from "$fresh/server.ts";
 import Footer from "../components/Footer.tsx";
+import { Partytown } from "partytown";
 
 export default function App({ Component }: AppProps) {
   return (
@@ -31,10 +32,14 @@ export default function App({ Component }: AppProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
-        <script src='https://takeback.bysourfruit.com/api/kit/SFUH0J0YOJPBWL50AMSFSS' />
+        <script
+          src="https://takeback.bysourfruit.com/api/kit/SFUH0J0YOJPBWL50AMSFSS"
+          type="text/partytown"
+        />
         <title>Kuru kuru~!</title>
       </head>
       <body>
+        <Partytown />
         <Component />
       </body>
       <Footer />
