@@ -49,7 +49,8 @@ export default function Counter(props: SharedProps) {
   );
   const [internalCount, setInternalCount] = useState(0);
   const [timer, setTimer] = useState(0);
-  const ipc = new BroadcastChannel("counterIpc");
+  const [socketState, setSocketState] = useState(0);
+  const ipc = new BroadcastChannel("counter-ipc");
 
   const THRESHOLD_CLICKS = 30; // Maximum number of clicks in an interval
   const INTERVAL_TIME_SECONDS = 60 * 0.5; // Every 30 seconds
@@ -58,16 +59,15 @@ export default function Counter(props: SharedProps) {
 
   const clickThresholdSurpassed = () => {
     return clicksInInterval >= THRESHOLD_CLICKS;
-  }
+  };
 
   useEffect(() => {
     if (clickThresholdSurpassed()) {
       // Setup a timer
       const intervalId = setTimeout(() => {
-      
         // Update interval time
-        setIntervalTime(prevTime => prevTime + 1);
-  
+        setIntervalTime((prevTime) => prevTime + 1);
+
         // Reset interval if expired
         if (intervalTime >= INTERVAL_TIME_SECONDS) {
           setIntervalTime(0);
@@ -75,11 +75,13 @@ export default function Counter(props: SharedProps) {
         }
       }, 1000 * 1);
 
-      return () => { clearInterval(intervalId) }
+      return () => {
+        clearInterval(intervalId);
+      };
     }
   }, [clicksInInterval, intervalTime]);
 
-  const onClick = () => {
+  function handleClick() {
     setInternalCount(internalCount + 1);
     setClicksInInterval(clicksInInterval + 1);
     setCount(count + 1);
@@ -122,6 +124,17 @@ export default function Counter(props: SharedProps) {
         setInternalCount(0);
       }
     }, 2048));
+  }
+
+  const onClick = () => {
+    switch(socketState) {
+      case 1:
+        handleClick();
+        break;
+      default:
+        console.warn("WARN: Attempted to interact while the socket is not ready!");
+        break;
+    }
   };
 
   const handleWSEvents = (ws: WebSocket) => {
@@ -145,7 +158,8 @@ export default function Counter(props: SharedProps) {
       console.log(
         `[${new Date().toISOString()}] Connected to statistics socket`,
       );
-      ws.send(0x0.toString());
+      setSocketState(1);
+      ws.send((0x0).toString());
     };
 
     ws.onmessage = (e) => {
@@ -165,23 +179,26 @@ export default function Counter(props: SharedProps) {
     };
 
     ws.onclose = () => {
+      setSocketState(3);
       console.warn(
         `[${new Date().toISOString()}] Disconnected from statistics socket.`,
       );
     };
 
     ws.onerror = (e) => {
+      setSocketState(3);
       console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
     };
   };
 
   useEffect(() => {
-    let ws = new WebSocket(window.location.href.replace("http", "ws"));
+    let ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+    setSocketState(1);
 
     handleWSEvents(ws);
 
     ipc.addEventListener("message", (e) => {
-      ws.send(JSON.stringify({data: e.data}));
+      ws!.send(JSON.stringify({ data: e.data }));
     });
 
     const onlineHandler = () => {
@@ -216,8 +233,21 @@ export default function Counter(props: SharedProps) {
         <p class="text-gray-100">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
-        {!clickThresholdSurpassed() && <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>}
-        {clickThresholdSurpassed() && <p class="text-red-600 font-bold">Too many squishes! Wait until {INTERVAL_TIME_SECONDS - intervalTime} seconds.</p>}
+        {!clickThresholdSurpassed() && socketState === 1 && (
+          <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
+        )}
+        {socketState !== 1 && (
+          <p class="px-6 pt-4 pb-2 text-gray-100">
+            Please wait...
+          </p>
+        )}
+        {clickThresholdSurpassed() && (
+          <p class="text-red-600 font-bold">
+            Too many squishes! Wait until {INTERVAL_TIME_SECONDS - intervalTime}
+            {" "}
+            seconds.
+          </p>
+        )}
       </div>
       <div class="px-6 pt-4 pb-2 text-white">
         <p>
