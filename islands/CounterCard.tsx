@@ -127,12 +127,14 @@ export default function Counter(props: SharedProps) {
   }
 
   const onClick = () => {
-    switch(socketState) {
+    switch (socketState) {
       case 1:
         handleClick();
         break;
       default:
-        console.warn("WARN: Attempted to interact while the socket is not ready!");
+        console.warn(
+          "WARN: Attempted to interact while the socket is not ready!",
+        );
         break;
     }
   };
@@ -192,7 +194,9 @@ export default function Counter(props: SharedProps) {
   };
 
   useEffect(() => {
-    let ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+    let ws = new WebSocket(
+      globalThis.window.location.href.replace("http", "ws"),
+    );
     setSocketState(1);
 
     handleWSEvents(ws);
@@ -233,14 +237,9 @@ export default function Counter(props: SharedProps) {
         <p class="text-gray-100">Times the kuru was squished~</p>
       </div>
       <div class="px-6 pt-4 pb-2">
-        {!clickThresholdSurpassed() && socketState === 1 && (
-          <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
-        )}
-        {socketState !== 1 && (
-          <p class="px-6 pt-4 pb-2 text-gray-100">
-            Please wait...
-          </p>
-        )}
+        {!clickThresholdSurpassed() && socketState === 1
+          ? <Button id="ctr-btn" onClick={onClick}>Squish that kuru~</Button>
+          : <p class="px-6 pt-4 pb-2 text-gray-100">Please wait...</p>}
         {clickThresholdSurpassed() && (
           <p class="text-red-600 font-bold">
             Too many squishes! Wait until {INTERVAL_TIME_SECONDS - intervalTime}
