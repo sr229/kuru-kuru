@@ -33,7 +33,7 @@ export default function App({ Component }: AppProps) {
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
         <script
-          src="https://takeback.bysourfruit.com/api/kit/SFUH0J0YOJPBWL50AMSFSS"
+          src="https://takeback.bysourfruit.com/api/kit/1QFWK02N8XLPML2AHW8TVD"
           type="text/partytown"
         />
         <title>Kuru kuru~!</title>
