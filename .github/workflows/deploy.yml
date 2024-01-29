@@ -31,3 +31,4 @@ jobs:
         with:
           project: "herta" 
           entrypoint: "./main.ts"
+          root: "."
