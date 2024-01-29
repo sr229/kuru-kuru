@@ -33,4 +33,4 @@ This will watch the project directory and restart as necessary.
 
 Original website by [@duiqt](https://github.com/duiqt/herta_kuru), All Rights Reserved. Kuru-kuru gif is by [@Seseren_kr](https://twitter.com/Seseren_kr). All rights Reserved.
 
-Uses some assets from Honkai Star Rail. Copyright Cognosphere, All Rights Reserved. This website is not affiliated with Cognosphere/miHoYo.
+Uses some assets from Honkai Star Rail. Copyright Cognosphere Pte. Ltd. All Rights Reserved. This website is not affiliated with Cognosphere/miHoYo.
