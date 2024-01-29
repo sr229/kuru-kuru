@@ -7,3 +7,6 @@
 
 # Fresh build directory
 _fresh/
+
+# Tailwind requires node_modules so we need to exclude it
+node_modules/

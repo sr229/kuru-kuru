@@ -32,6 +32,7 @@ export default function App({ Component }: AppProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
+        <link rel="stylesheet" href="/styles.css" />
         <script
           src="https://takeback.bysourfruit.com/api/kit/1QFWK02N8XLPML2AHW8TVD"
           type="text/partytown"
