@@ -1,13 +1,26 @@
 {
   "lock": false,
+  "nodeModulesDir": true,
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
-    "start": "deno run -A --unstable-broadcast-channel --unstable-kv --watch=static/,home_content/,routes/ dev.ts",
-    "build": "deno run -A --unstable-broadcast-channel --unstable-kv dev.ts build",
-    "preview": "deno run -A --unstable-broadcast-channel --unstable-kv main.ts",
-    "update": "deno run -A --unstable-broadcast-channel --unstable-kv -r https://fresh.deno.dev/update ."
+    "cli": "echo \"import '\\$fresh/src/dev/cli.ts'\" | deno run --unstable -A -",
+    "manifest": "deno task cli manifest $(pwd)",
+    "start": "deno run -A --unstable-kv --unstable-broadcast-channel --watch=static/,routes/ dev.ts",
+    "build": "deno run -A --unstable-kv --unstable-broadcast-channel  dev.ts build",
+    "preview": "deno run -A --unstable-kv --unstable-broadcast-channel main.ts",
+    "update": "deno run -A -r https://fresh.deno.dev/update ."
   },
-  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+  "lint": {
+    "rules": {
+      "tags": [
+        "fresh",
+        "recommended"
+      ]
+    }
+  },
+  "exclude": [
+    "**/_fresh/*"
+  ],
   "lib": { "deno.unstable": true },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.6.3/",
@@ -16,14 +29,12 @@
     "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.2",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
-    "twind": "https://esm.sh/@twind/core@1.1.3",
-    "twind/": "https://esm.sh/@twind/core@1.1.3/",
-    "@twind/preset-tailwind": "https://esm.sh/@twind/preset-tailwind@1.1.4",
-    "@twind/preset-autoprefix": "https://esm.sh/@twind/preset-autoprefix@1.0.7",
     "$std/": "https://deno.land/std@0.193.0/",
     "$gfm": "https://deno.land/x/gfm@0.2.3/mod.ts",
-    "partytown": "https://esm.sh/@builder.io/partytown@0.8.1/react"
+    "partytown": "https://esm.sh/@builder.io/partytown@0.8.1/react",
+    "tailwindcss": "npm:tailwindcss@3.3.5",
+    "tailwindcss/": "npm:/tailwindcss@3.3.5/",
+    "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js"
   },
-  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
-  "exclude": ["**/_fresh/*"]
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" }
 }
