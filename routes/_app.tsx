@@ -33,11 +33,13 @@ export default function App({ Component }: AppProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
-        <script src="/partytown.js" />
+        <script src="https://takeback.bysourfruit.com/api/kit/1QFWK02N8XLPML2AHW8TVD" />
         <script
-          src="https://takeback.bysourfruit.com/api/kit/1QFWK02N8XLPML2AHW8TVD"
-          type="text/partytown"
-        />
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "7c84e8ba3201403287d3e3ad9fe8d926"}'
+        >
+        </script>
         <title>Kuru kuru~!</title>
       </head>
       <body>
