@@ -40,7 +40,8 @@ export const handler: Handlers = {
           if (socket.readyState === 1) {
             socket.send(JSON.stringify({ globalCount: e.data }));
           }
-        } catch (e) {
+        // deno-lint-ignore no-explicit-any
+        } catch (e: any) {
           console.warn(`[${new Date().toISOString()}] ${e.stack}`);
         }
       });
