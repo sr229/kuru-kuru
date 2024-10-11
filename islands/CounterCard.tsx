@@ -182,7 +182,8 @@ export default function Counter(props: SharedProps) {
     handleWSEvents(ws);
 
     ipc.addEventListener("message", (e) => {
-      if (e.data > 0 && e.data < Number.MAX_SAFE_INTEGER) {
+      // don't send anything if data is negative or NaN or larger than MAX_SAFE_INTEGER
+      if (e.data < 0 || Number.isNaN(e.data) || e.data >= Number.MAX_SAFE_INTEGER) {
         console.warn("Unsafe data received. Ignoring.");
       } else {
         ws!.send(JSON.stringify({ data: e.data }));
