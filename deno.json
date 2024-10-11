@@ -1,5 +1,5 @@
 {
-  "lock": true,
+  "lock": false,
   "nodeModulesDir": true,
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
