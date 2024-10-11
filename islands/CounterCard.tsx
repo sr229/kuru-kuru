@@ -28,7 +28,7 @@ export function animateMascot() {
   parentEl.appendChild(mascotEl);
 
   let pos = -500;
-  const limit = window.innerWidth + 500;
+  const limit = globalThis.window.innerWidth + 500;
   clearInterval(id);
 
   id = setInterval(() => {
@@ -36,7 +36,7 @@ export function animateMascot() {
       clearInterval(id);
       mascotEl.remove();
     } else {
-      pos += Math.floor(window.innerWidth / reversalSpeed);
+      pos += Math.floor(globalThis.window.innerWidth / reversalSpeed);
       mascotEl.style.right = pos + "px";
     }
   }, 12);
@@ -52,10 +52,21 @@ export default function Counter(props: SharedProps) {
   const [socketState, setSocketState] = useState(0);
   const ipc = new BroadcastChannel("counter-ipc");
 
-  function handleClick() {
+  function handleClick(e: MouseEvent) {
+    animateMascot();
+    
+    const lastEvt = e.timeStamp;
+    const now = Date.now();
+
+    // an average clicks per second for a human is 6.5 clicks per second (CPS) but can go up to 10 CPS.
+    // ignore if its more than 10 CPS
+    if (now - lastEvt < 100) {
+      console.warn("Possible automation detected. Not counting.");
+      return;
+    }
+
     setInternalCount(internalCount + 1);
     setCount(count + 1);
-    animateMascot();
 
     let audioFile =
       props.audioFiles[Math.floor(Math.random() * props.audioFiles.length)];
@@ -77,8 +88,7 @@ export default function Counter(props: SharedProps) {
 
     clearTimeout(timer);
     setTimer(setTimeout(() => {
-      // guard against numbers that are beyond MAX_SAFE_INTEGER.
-      if (internalCount === Number.MAX_SAFE_INTEGER) {
+       if (internalCount === Number.MAX_SAFE_INTEGER) {
         console.warn(
           "Data too large to be submitted and represented safely. Disposing.",
         );
@@ -96,10 +106,10 @@ export default function Counter(props: SharedProps) {
     }, 2048));
   }
 
-  const onClick = () => {
+  const onClick = (e: MouseEvent) => {
     switch (socketState) {
       case 1:
-        handleClick();
+        handleClick(e);
         break;
       default:
         console.warn(
@@ -110,7 +120,7 @@ export default function Counter(props: SharedProps) {
   };
 
   const handleWSEvents = (ws: WebSocket) => {
-    const heartbeatFunc = (fName: number) => {
+    const heartbeatFunc = (_fn: number) => {
       if (ws.readyState === 1) ws.send((0x0).toString());
       // do nothing because you can do nothing
       else return;
@@ -119,7 +129,7 @@ export default function Counter(props: SharedProps) {
     const tmFunc = () => {
       console.warn("Server is down, reconnecting...");
       ws.close();
-      ws = new WebSocket(window.location.href.replace("http", "ws"));
+      ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
       handleWSEvents(ws);
     };
 
@@ -172,12 +182,16 @@ export default function Counter(props: SharedProps) {
     handleWSEvents(ws);
 
     ipc.addEventListener("message", (e) => {
-      ws!.send(JSON.stringify({ data: e.data }));
+      if (e.data > 0 && e.data < Number.MAX_SAFE_INTEGER) {
+        console.warn("Unsafe data received. Ignoring.");
+      } else {
+        ws!.send(JSON.stringify({ data: e.data }));
+      }
     });
 
     const onlineHandler = () => {
       console.log("Client detected online, resuming connection.");
-      ws = new WebSocket(window.location.href.replace("http", "ws"));
+      ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
       handleWSEvents(ws);
     };
 

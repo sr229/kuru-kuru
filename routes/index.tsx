@@ -54,9 +54,13 @@ export const handler: Handlers = {
           const reqNewCount = JSON.parse(e.data);
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
-          if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
+          if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) {
+            console.warn(`[${new Date().toISOString()}] Unsafe data received from ${ctx.remoteAddr}. Ignoring.`);
+          }
           // check if the data is negative. Ignore if it is
-          if (reqNewCount.data < 0) return;
+          if (reqNewCount.data < 0) {
+            console.warn(`[${new Date().toISOString()}] Negative data received from ${ctx.remoteAddr}. Is this an attack?`);
+          } 
 
           await setGlobalStatistics(reqNewCount.data);
 
