@@ -54,6 +54,9 @@ export const handler: Handlers = {
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) return;
+          // check if the data is negative. Ignore if it is
+          if (reqNewCount.data < 0) return;
+
           await setGlobalStatistics(reqNewCount.data);
 
           const newCount = await getGlobalStatistics();
