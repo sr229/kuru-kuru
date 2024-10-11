@@ -1,6 +1,6 @@
 {
-  "lock": false,
-  "nodeModulesDir": true,
+  "lock": true,
+  "nodeModulesDir": "auto",
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "cli": "echo \"import '\\$fresh/src/dev/cli.ts'\" | deno run --unstable -A -",
