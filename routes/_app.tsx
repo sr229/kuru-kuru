@@ -33,7 +33,6 @@ export default function App({ Component }: AppProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.deno.dev/" />
-        </script>
         <title>Kuru kuru~!</title>
       </head>
       <body>
