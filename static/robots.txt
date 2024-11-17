@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://herta.us.kg/sitemap.xml 
