@@ -29,6 +29,15 @@ deno task start
 
 This will watch the project directory and restart as necessary.
 
+### Adding New Languages
+
+To add a new language, follow these steps:
+
+1. Create a new directory under `locales` with the language code (e.g., `fr` for French).
+2. Create a `translation.json` file in the new directory with key-value pairs for translations.
+3. Update `routes/_app.tsx` to include the new language resources.
+4. Update any components or pages to use the `t` function from `react-i18next` for translations.
+
 ### Credits
 
 Original website by [@duiqt](https://github.com/duiqt/herta_kuru), All Rights Reserved. Kuru-kuru gif is by [@Seseren_kr](https://twitter.com/Seseren_kr). All rights Reserved.

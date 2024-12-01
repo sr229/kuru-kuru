@@ -2,18 +2,23 @@ import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import MarkdownContent from "../components/MarkdownContent.tsx";
+import { useTranslation } from "react-i18next";
 
-// TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
-// and we want to randomly play one of them when the mascot is squished
-const kuruAudio: string[] = [];
-// also hardcodeed for now
-const mdData = await Deno.readTextFile("home_content/en.md");
+const kuruAudio: { [key: string]: string[] } = {
+  en: [],
+  ja: [],
+};
 
-// iterate inside ../static/assets/audio/ja/ and add all files to the array
-for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
-  if (f.isDirectory) continue;
-  // replace file paths with /assets/audio/ja/filename.mp3
-  kuruAudio.push(`/assets/audio/ja/${f.name}`);
+const mdData = {
+  en: await Deno.readTextFile("home_content/en.md"),
+  ja: await Deno.readTextFile("home_content/ja.md"),
+};
+
+for (const lang of Object.keys(kuruAudio)) {
+  for (const f of Deno.readDirSync(`static/assets/audio/${lang}/`)) {
+    if (f.isDirectory) continue;
+    kuruAudio[lang].push(`/assets/audio/${lang}/${f.name}`);
+  }
 }
 
 export const handler: Handlers = {
@@ -21,7 +26,6 @@ export const handler: Handlers = {
     let bc = new BroadcastChannel("global-count");
     const headers = req.headers;
 
-    // check if we're requesting wss:// or ws://, then upgrade as necessary
     if (headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
 
@@ -36,28 +40,23 @@ export const handler: Handlers = {
 
       bc.addEventListener("message", (e) => {
         try {
-          // don't send if the socket is closed
           if (socket.readyState === 1) {
             socket.send(JSON.stringify({ globalCount: e.data }));
           }
-        // deno-lint-ignore no-explicit-any
         } catch (e: any) {
           console.warn(`[${new Date().toISOString()}] ${e.stack}`);
         }
       });
 
       socket.onmessage = async (e) => {
-        // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
         if (e.data === (0x0).toString()) {
           socket.send((0x1).toString());
         } else {
           const reqNewCount = JSON.parse(e.data);
 
-          // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) {
             console.warn(`[${new Date().toISOString()}] Unsafe data received from ${ctx.remoteAddr}. Ignoring.`);
           }
-          // check if the data is negative. Ignore if it is
           if (reqNewCount.data < 0) {
             console.warn(`[${new Date().toISOString()}] Negative data received from ${ctx.remoteAddr}. Is this an attack?`);
           } 
@@ -98,8 +97,6 @@ export const handler: Handlers = {
     const body = await req.json();
     const headers = req.headers;
 
-    // check if useragent is a browser
-    // we can use the Sec-Fetch-Mode header but it's not supported by all browsers
     if (!headers.get("sec-fetch-mode")) {
       return new Response("", {
         status: 403,
@@ -107,7 +104,6 @@ export const handler: Handlers = {
       });
     }
 
-    // check against MAX_SAFE_INTEGER to prevent overflow
     if (body.data >= Number.MAX_SAFE_INTEGER) {
       return new Response("", {
         status: 413,
@@ -115,7 +111,6 @@ export const handler: Handlers = {
       });
     }
 
-    // ha you thought this is an endpoint
     return new Response("", {
       status: 410,
       statusText: "Gone.",
@@ -126,7 +121,9 @@ export const handler: Handlers = {
 export default function Home(
   { data: { globalCount } }: { data: { globalCount: bigint } },
 ) {
-  // added a pseudo-div here so I can nest another div inside it smh
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   return (
     <div>
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
@@ -136,18 +133,17 @@ export default function Home(
         >
           <img class="z-10" src="/favicon.png" width="60px" />
           <h1 class="text-4xl text-white text-center font-bold z-10">
-            Welcome to herta kuru
+            {t('welcome')}
           </h1>
           <p class="my-4 font-bold text-center text-white z-10">
-            The website for Herta, the <del>annoying</del>{" "}
-            cutest genius Honkai: Star Rail character out there.
+            {t('description')}
           </p>
           <Counter
             globalCount={globalCount}
-            audioFiles={kuruAudio}
+            audioFiles={kuruAudio[lang]}
           />
         </div>
-        <MarkdownContent mdData={mdData} />
+        <MarkdownContent mdData={mdData[lang]} />
       </div>
     </div>
   );

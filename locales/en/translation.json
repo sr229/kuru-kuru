@@ -1,0 +1,15 @@
+{
+  "welcome": "Welcome to herta kuru",
+  "description": "The website for Herta, the cutest genius Honkai: Star Rail character out there.",
+  "squish_button": "Squish that kuru~",
+  "loading": "Please wait...",
+  "global_count": "Everyone has squished the kuru {count} times!",
+  "local_count": "{count} Times the kuru was squished~",
+  "credits": "Credits",
+  "credits_content": "This contains the credits content in the website. If you want to localize, just simply copy `en.md` and translate from there.",
+  "footer": {
+    "rights_reserved": "All Rights Reserved. Licensed under MIT.",
+    "github_repo": "GitHub Repo",
+    "visit_original": "Visit the original!"
+  }
+}
