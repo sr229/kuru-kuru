@@ -1,5 +1,6 @@
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
+import { createHash } from "https://deno.land/std/hash/mod.ts";
 
 interface SharedProps {
   globalCount: bigint;
@@ -40,6 +41,13 @@ export function animateMascot() {
       mascotEl.style.right = pos + "px";
     }
   }, 12);
+}
+
+// Function to generate a valid hash using the nonce
+function generateHash(nonce: string): string {
+  const hash = createHash("sha256");
+  hash.update(nonce);
+  return hash.toString();
 }
 
 export default function Counter(props: SharedProps) {
@@ -179,7 +187,15 @@ export default function Counter(props: SharedProps) {
           break;
         default: {
           const data = JSON.parse(e.data);
-          setGlobalCount(BigInt(parseInt(data.globalCount)));
+
+          // If the message contains a nonce, generate a hash and send it back
+          if (data.nonce) {
+            const nonce = data.nonce;
+            const hash = generateHash(nonce);
+            ws.send(JSON.stringify({ clientResponse: hash, nonce }));
+          } else {
+            setGlobalCount(BigInt(parseInt(data.globalCount)));
+          }
         }
       }
     };
