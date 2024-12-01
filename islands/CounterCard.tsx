@@ -115,8 +115,33 @@ export default function Counter(props: SharedProps) {
         console.warn(
           "WARN: Attempted to interact while the socket is not ready!",
         );
+        reconnect();
         break;
     }
+  };
+
+  const reconnect = () => {
+    console.log("Attempting to reconnect...");
+    let delay = 5000; // start with 5 seconds
+    const maxDelay = 60000; // maximum delay of 60 seconds
+
+    const attemptReconnect = () => {
+      let ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+      handleWSEvents(ws);
+
+      ws.onopen = () => {
+        console.log("Reconnected successfully.");
+        delay = 5000; // reset delay on successful connection
+      };
+
+      ws.onerror = () => {
+        console.warn(`Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`);
+        setTimeout(attemptReconnect, delay);
+        delay = Math.min(delay * 2, maxDelay); // double the delay, but do not exceed maxDelay
+      };
+    };
+
+    attemptReconnect();
   };
 
   const handleWSEvents = (ws: WebSocket) => {
@@ -129,8 +154,7 @@ export default function Counter(props: SharedProps) {
     const tmFunc = () => {
       console.warn("Server is down, reconnecting...");
       ws.close();
-      ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
-      handleWSEvents(ws);
+      reconnect();
     };
 
     let heartbeat = setInterval(() => heartbeatFunc(heartbeat), 15000);
@@ -165,11 +189,13 @@ export default function Counter(props: SharedProps) {
       console.warn(
         `[${new Date().toISOString()}] Disconnected from statistics socket.`,
       );
+      reconnect();
     };
 
     ws.onerror = (e) => {
       setSocketState(3);
       console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
+      reconnect();
     };
   };
 
