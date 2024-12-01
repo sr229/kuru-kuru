@@ -1,0 +1,15 @@
+{
+  "welcome": "ようこそ、ヘルタ・クルへ",
+  "description": "ここは、最もかわいい天才キャラクター、ヘルタのウェブサイトです。",
+  "squish_button": "クルを押しつぶす~",
+  "loading": "お待ちください...",
+  "global_count": "みんなでクルを{count}回押しつぶしました！",
+  "local_count": "クルを{count}回押しつぶしました~",
+  "credits": "クレジット",
+  "credits_content": "これはウェブサイトのクレジットコンテンツです。ローカライズしたい場合は、`en.md`をコピーして翻訳してください。",
+  "footer": {
+    "rights_reserved": "全著作権所有。MITライセンス。",
+    "github_repo": "GitHubリポジトリ",
+    "visit_original": "オリジナルを訪問！"
+  }
+}
