@@ -122,7 +122,7 @@ export default function Counter(props: SharedProps) {
 
   const reconnect = () => {
     console.log("Attempting to reconnect...");
-    let delay = 1000; // start with 1 second
+    let delay = 5000; // start with 5 seconds
     const maxDelay = 60000; // maximum delay of 60 seconds
 
     const attemptReconnect = () => {
@@ -131,7 +131,7 @@ export default function Counter(props: SharedProps) {
 
       ws.onopen = () => {
         console.log("Reconnected successfully.");
-        delay = 1000; // reset delay on successful connection
+        delay = 5000; // reset delay on successful connection
       };
 
       ws.onerror = () => {
