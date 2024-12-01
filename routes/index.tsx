@@ -2,6 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import MarkdownContent from "../components/MarkdownContent.tsx";
+import { createHash } from "https://deno.land/std/hash/mod.ts";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished
@@ -14,6 +15,19 @@ for (const f of Deno.readDirSync("static/assets/audio/ja/")) {
   if (f.isDirectory) continue;
   // replace file paths with /assets/audio/ja/filename.mp3
   kuruAudio.push(`/assets/audio/ja/${f.name}`);
+}
+
+// Function to generate a nonce and send it to the client
+function generateNonce(): string {
+  return Math.random().toString(36).substring(2);
+}
+
+// Function to verify the client's response using the nonce
+function verifyClientResponse(nonce: string, clientResponse: string): boolean {
+  const hash = createHash("sha256");
+  hash.update(nonce);
+  const expectedResponse = hash.toString();
+  return expectedResponse === clientResponse;
 }
 
 export const handler: Handlers = {
@@ -32,6 +46,10 @@ export const handler: Handlers = {
             JSON.stringify(ctx.remoteAddr)
           }`,
         );
+
+        // Generate a nonce and send it to the client
+        const nonce = generateNonce();
+        socket.send(JSON.stringify({ nonce }));
       };
 
       bc.addEventListener("message", (e) => {
@@ -47,11 +65,24 @@ export const handler: Handlers = {
       });
 
       socket.onmessage = async (e) => {
+        const message = JSON.parse(e.data);
+
+        // If the message contains a client response, verify it
+        if (message.clientResponse) {
+          const nonce = message.nonce;
+          const clientResponse = message.clientResponse;
+
+          if (!verifyClientResponse(nonce, clientResponse)) {
+            socket.close(1008, "Invalid client response");
+            return;
+          }
+        }
+
         // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
-        if (e.data === (0x0).toString()) {
+        if (message.data === (0x0).toString()) {
           socket.send((0x1).toString());
         } else {
-          const reqNewCount = JSON.parse(e.data);
+          const reqNewCount = JSON.parse(message.data);
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) {
