@@ -25,7 +25,10 @@
     "partytown": "https://esm.sh/@builder.io/partytown@0.8.1/react",
     "tailwindcss": "npm:tailwindcss@3.3.5",
     "tailwindcss/": "npm:/tailwindcss@3.3.5/",
-    "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js"
+    "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js",
+    "i18next": "https://esm.sh/i18next@21.8.15",
+    "react-i18next": "https://esm.sh/react-i18next@11.15.3",
+    "i18next-browser-languagedetector": "https://esm.sh/i18next-browser-languagedetector@6.1.2"
   },
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" }
 }
