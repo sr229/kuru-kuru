@@ -25,6 +25,9 @@ export const handler: Handlers = {
     if (headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
 
+      // Generate a random challenge string
+      const challenge = Math.random().toString(36).substring(2, 15);
+
       socket.onopen = () => {
         bc = new BroadcastChannel("global-count");
         console.log(
@@ -32,6 +35,8 @@ export const handler: Handlers = {
             JSON.stringify(ctx.remoteAddr)
           }`,
         );
+        // Send the challenge to the client
+        socket.send(JSON.stringify({ challenge }));
       };
 
       bc.addEventListener("message", (e) => {
@@ -47,11 +52,20 @@ export const handler: Handlers = {
       });
 
       socket.onmessage = async (e) => {
+        const message = JSON.parse(e.data);
+
+        // Verify the client's response to the challenge
+        if (message.response !== challenge) {
+          console.warn(`[${new Date().toISOString()}] Invalid challenge response from ${ctx.remoteAddr}. Closing connection.`);
+          socket.close();
+          return;
+        }
+
         // client will send 0x0 as a string, send back 0x1 as a string to confirm the connection is alive
-        if (e.data === (0x0).toString()) {
+        if (message.data === (0x0).toString()) {
           socket.send((0x1).toString());
         } else {
-          const reqNewCount = JSON.parse(e.data);
+          const reqNewCount = message;
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) {

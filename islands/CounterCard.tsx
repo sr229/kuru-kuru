@@ -179,7 +179,12 @@ export default function Counter(props: SharedProps) {
           break;
         default: {
           const data = JSON.parse(e.data);
-          setGlobalCount(BigInt(parseInt(data.globalCount)));
+          if (data.challenge) {
+            // Respond to the challenge sent by the server
+            ws.send(JSON.stringify({ response: data.challenge }));
+          } else if (data.globalCount) {
+            setGlobalCount(BigInt(parseInt(data.globalCount)));
+          }
         }
       }
     };
