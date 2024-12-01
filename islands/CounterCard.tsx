@@ -115,8 +115,15 @@ export default function Counter(props: SharedProps) {
         console.warn(
           "WARN: Attempted to interact while the socket is not ready!",
         );
+        reconnect();
         break;
     }
+  };
+
+  const reconnect = () => {
+    console.log("Attempting to reconnect...");
+    let ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+    handleWSEvents(ws);
   };
 
   const handleWSEvents = (ws: WebSocket) => {
@@ -129,8 +136,7 @@ export default function Counter(props: SharedProps) {
     const tmFunc = () => {
       console.warn("Server is down, reconnecting...");
       ws.close();
-      ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
-      handleWSEvents(ws);
+      reconnect();
     };
 
     let heartbeat = setInterval(() => heartbeatFunc(heartbeat), 15000);
@@ -165,11 +171,13 @@ export default function Counter(props: SharedProps) {
       console.warn(
         `[${new Date().toISOString()}] Disconnected from statistics socket.`,
       );
+      reconnect();
     };
 
     ws.onerror = (e) => {
       setSocketState(3);
       console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
+      reconnect();
     };
   };
 
