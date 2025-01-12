@@ -126,12 +126,13 @@ export default function Counter(props: SharedProps) {
     const maxDelay = 60000; // maximum delay of 60 seconds
 
     const attemptReconnect = () => {
-      let ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+      const ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
       handleWSEvents(ws);
 
       ws.onopen = () => {
         console.log("Reconnected successfully.");
         delay = 5000; // reset delay on successful connection
+        setSocketState(1);
       };
 
       ws.onerror = () => {
@@ -144,7 +145,8 @@ export default function Counter(props: SharedProps) {
     try {
       setTimeout(attemptReconnect, delay);
     } catch {
-      delay += 5000;
+      console.warn(`Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`);
+      delay = Math.min(delay * 2, maxDelay);
       setTimeout(attemptReconnect, delay);
     }
   };
