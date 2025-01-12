@@ -7,12 +7,12 @@
       "upgradePackages": true
     },
     "ghcr.io/nmemoto/devcontainer-features/deno:1": {
-      "version": "latest"
+      "version": "1.44.3"
     }
   },
   "customizations": {
     "vscode": {
-      "extensions": ["sastan.twind-intellisense", "denoland.vscode-deno"]
+      "extensions": ["denoland.vscode-deno"]
     }
   }
 }
