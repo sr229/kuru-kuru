@@ -128,7 +128,7 @@ export default function Home(
 ) {
   // added a pseudo-div here so I can nest another div inside it smh
   return (
-    <div>
+    <>
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
         <div
           class="max-w-screen-md mx-auto flex flex-col items-center justify-center"
@@ -149,6 +149,6 @@ export default function Home(
         </div>
         <MarkdownContent mdData={mdData} />
       </div>
-    </div>
+    </>
   );
 }
