@@ -54,7 +54,7 @@ export default function Counter(props: SharedProps) {
 
   function handleClick(e: MouseEvent) {
     animateMascot();
-    
+
     const lastEvt = e.timeStamp;
     const now = Date.now();
 
@@ -88,7 +88,7 @@ export default function Counter(props: SharedProps) {
 
     clearTimeout(timer);
     setTimer(setTimeout(() => {
-       if (internalCount === Number.MAX_SAFE_INTEGER) {
+      if (internalCount === Number.MAX_SAFE_INTEGER) {
         console.warn(
           "Data too large to be submitted and represented safely. Disposing.",
         );
@@ -126,7 +126,9 @@ export default function Counter(props: SharedProps) {
     const maxDelay = 60000; // maximum delay of 60 seconds
 
     const attemptReconnect = () => {
-      const ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
+      const ws = new WebSocket(
+        globalThis.window.location.href.replace("http", "ws"),
+      );
       handleWSEvents(ws);
 
       ws.onopen = () => {
@@ -136,7 +138,9 @@ export default function Counter(props: SharedProps) {
       };
 
       ws.onerror = () => {
-        console.warn(`Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`);
+        console.warn(
+          `Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`,
+        );
         setTimeout(attemptReconnect, delay);
         delay = Math.min(delay * 2, maxDelay); // double the delay, but do not exceed maxDelay
       };
@@ -145,7 +149,9 @@ export default function Counter(props: SharedProps) {
     try {
       setTimeout(attemptReconnect, delay);
     } catch {
-      console.warn(`Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`);
+      console.warn(
+        `Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`,
+      );
       delay = Math.min(delay * 2, maxDelay);
       setTimeout(attemptReconnect, delay);
     }
@@ -216,7 +222,9 @@ export default function Counter(props: SharedProps) {
 
     ipc.addEventListener("message", (e) => {
       // don't send anything if data is negative or NaN or larger than MAX_SAFE_INTEGER
-      if (e.data < 0 || Number.isNaN(e.data) || e.data >= Number.MAX_SAFE_INTEGER) {
+      if (
+        e.data < 0 || Number.isNaN(e.data) || e.data >= Number.MAX_SAFE_INTEGER
+      ) {
         console.warn("Unsafe data received. Ignoring.");
       } else {
         ws!.send(JSON.stringify({ data: e.data }));
