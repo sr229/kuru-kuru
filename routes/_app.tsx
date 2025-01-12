@@ -34,9 +34,10 @@ export default function App({ Component }: PageProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.us.kg/" />
-        { /* Most Ko-fi widget sucks so we'll arbitrarily use the floating chat widget */ }
-        <div dangerouslySetInnerHTML={{
-          __html: `
+        {/* Most Ko-fi widget sucks so we'll arbitrarily use the floating chat widget */}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `
             <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
             <script>
               kofiWidgetOverlay.draw('capuccino', {
@@ -46,8 +47,10 @@ export default function App({ Component }: PageProps) {
                 'floating-chat.donateButton.text-color': '#fff'
               });
             </script>
-          `
-        }}></div>
+          `,
+          }}
+        >
+        </div>
         {/* End of Ko-fi widget */}
       </Head>
       <body>
