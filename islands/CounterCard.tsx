@@ -141,7 +141,12 @@ export default function Counter(props: SharedProps) {
       };
     };
 
-    attemptReconnect();
+    try {
+      setTimeout(attemptReconnect, delay);
+    } catch {
+      delay += 5000;
+      setTimeout(attemptReconnect, delay);
+    }
   };
 
   const handleWSEvents = (ws: WebSocket) => {
