@@ -7,7 +7,7 @@
       "upgradePackages": true
     },
     "ghcr.io/nmemoto/devcontainer-features/deno:1": {
-      "version": "1.44.3"
+      "version": "latest"
     }
   },
   "customizations": {
