@@ -1,6 +1,6 @@
 ## Herta Kuru (v2)!
 
-[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/sr229/kuru-kuru)
+[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/sr229/kuru-kuru) [![Made with Fresh](https://fresh.deno.dev/fresh-badge.svg)](https://fresh.deno.dev)
 
 [Visit the Site](https://herta.deno.dev/) | [Check who's visiting it too!](https://takeback.bysourfruit.com/tracked/herta.deno.dev)
 
