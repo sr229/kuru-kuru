@@ -6,9 +6,29 @@ on:
     branches: master
 
 jobs:
+  check:
+    name: Lint and Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: latest
+
+      - name: Lint
+        run: deno task check
+
+      - name: Test Build
+        run: deno task build
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    needs: check
 
     permissions:
       id-token: write # Needed for auth with Deno Deploy
