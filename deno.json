@@ -21,7 +21,6 @@
     "@preact/signals": "npm:@preact/signals@1.2.2",
     "@preact/signals-core": "npm:@preact/signals-core@1.5.1",
     "$gfm": "jsr:@deno/gfm",
-    "partytown": "https://esm.sh/@builder.io/partytown@0.8.1/react",
     "tailwindcss": "npm:tailwindcss@3.3.5",
     "tailwindcss/": "npm:/tailwindcss@3.3.5/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js"

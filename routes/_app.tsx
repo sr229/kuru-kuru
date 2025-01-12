@@ -1,7 +1,6 @@
 import { PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import Footer from "../components/Footer.tsx";
-import { Partytown } from "partytown";
 
 export default function App({ Component }: PageProps) {
   return (
@@ -54,7 +53,6 @@ export default function App({ Component }: PageProps) {
         {/* End of Ko-fi widget */}
       </Head>
       <body>
-        <Partytown />
         <Component />
       </body>
       <Footer />
