@@ -2,6 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 import Counter from "../islands/CounterCard.tsx";
 import { getGlobalStatistics, setGlobalStatistics } from "../shared/db.ts";
 import MarkdownContent from "../components/MarkdownContent.tsx";
+import { Head } from "$fresh/runtime.ts";
 
 // TODO: This is hardcoded for now, but /assets/audio contains an N amount of files per language
 // and we want to randomly play one of them when the mascot is squished
@@ -40,7 +41,7 @@ export const handler: Handlers = {
           if (socket.readyState === 1) {
             socket.send(JSON.stringify({ globalCount: e.data }));
           }
-        // deno-lint-ignore no-explicit-any
+          // deno-lint-ignore no-explicit-any
         } catch (e: any) {
           console.warn(`[${new Date().toISOString()}] ${e.stack}`);
         }
@@ -54,13 +55,24 @@ export const handler: Handlers = {
           const reqNewCount = JSON.parse(e.data);
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
-          if (reqNewCount.data >= Number.MAX_SAFE_INTEGER && Number.isNaN(reqNewCount)) {
-            console.warn(`[${new Date().toISOString()}] Unsafe data received from ${ctx.remoteAddr}. Ignoring.`);
+          if (
+            reqNewCount.data >= Number.MAX_SAFE_INTEGER &&
+            Number.isNaN(reqNewCount)
+          ) {
+            console.warn(
+              `[${
+                new Date().toISOString()
+              }] Unsafe data received from ${ctx.remoteAddr}. Ignoring.`,
+            );
           }
           // check if the data is negative. Ignore if it is
           if (reqNewCount.data < 0) {
-            console.warn(`[${new Date().toISOString()}] Negative data received from ${ctx.remoteAddr}. Is this an attack?`);
-          } 
+            console.warn(
+              `[${
+                new Date().toISOString()
+              }] Negative data received from ${ctx.remoteAddr}. Is this an attack?`,
+            );
+          }
 
           await setGlobalStatistics(reqNewCount.data);
 
@@ -126,9 +138,11 @@ export const handler: Handlers = {
 export default function Home(
   { data: { globalCount } }: { data: { globalCount: bigint } },
 ) {
-  // added a pseudo-div here so I can nest another div inside it smh
   return (
     <>
+      <Head>
+        <title>Kuru kuru~!</title>
+      </Head>
       <div class="px-4 py-8 mx-auto bg-[#9d88d3]">
         <div
           class="max-w-screen-md mx-auto flex flex-col items-center justify-center"

@@ -14,7 +14,7 @@ finding a way to implement it, until I got bored, and then I picked it up again.
 The new system I implemented works using the following:
 
 - Using `BroadcastChannel`s and `WebSocket`s - we can send mutation events to update the counter, so this is practically realtime.
-- No API is actually exposed to the user, so no one can just take the statistics endpoint and just spam it, because the statistics server is also the website.
+- No API is actually exposed to the user, and have it on the same codebase as the site, so the backend inherits the website's security when deployed do Deno Deploy.
 - POSTing to the API is delayed by 5000ms (5s) before its submitted to the API in the frontend. While the provider does allow this, its due diligence to only submit it when there's inactivity.
 
 ### Usage

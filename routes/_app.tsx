@@ -1,12 +1,13 @@
-import { AppProps } from "$fresh/server.ts";
+import { PageProps } from "$fresh/server.ts";
+import { Head } from "$fresh/runtime.ts";
 import Footer from "../components/Footer.tsx";
 import { Partytown } from "partytown";
 
-export default function App({ Component }: AppProps) {
+export default function App({ Component }: PageProps) {
   return (
     <html lang="en">
-      <head>
-        <meta charset="utf-8" />
+      <Head>
+      <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles.css" />
         <meta property="og:title" content="Kuru Kuru~" />
@@ -32,9 +33,8 @@ export default function App({ Component }: AppProps) {
         />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
-        <meta name="canonical" content="https://herta.deno.dev/" />
-        <title>Kuru kuru~!</title>
-      </head>
+        <meta name="canonical" content="https://herta.us.kg/" />
+      </Head>
       <body>
         <Partytown />
         <Component />

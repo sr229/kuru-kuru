@@ -12,7 +12,10 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["denoland.vscode-deno"]
+      "extensions": [
+        "denoland.vscode-deno",
+        "bradlc.vscode-tailwindcss"
+      ]
     }
   }
 }
