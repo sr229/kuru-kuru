@@ -7,7 +7,7 @@ export default function App({ Component }: PageProps) {
   return (
     <html lang="en">
       <Head>
-      <meta charset="utf-8" />
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles.css" />
         <meta property="og:title" content="Kuru Kuru~" />
@@ -34,6 +34,21 @@ export default function App({ Component }: PageProps) {
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="canonical" content="https://herta.us.kg/" />
+        { /* Most Ko-fi widget sucks so we'll arbitrarily use the floating chat widget */ }
+        <div dangerouslySetInnerHTML={{
+          __html: `
+            <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+            <script>
+              kofiWidgetOverlay.draw('capuccino', {
+                'type': 'floating-chat',
+                'floating-chat.donateButton.text': 'Tip Me',
+                'floating-chat.donateButton.background-color': '#794bc4',
+                'floating-chat.donateButton.text-color': '#fff'
+              });
+            </script>
+          `
+        }}></div>
+        {/* End of Ko-fi widget */}
       </Head>
       <body>
         <Partytown />
