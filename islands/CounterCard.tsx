@@ -1,5 +1,6 @@
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
+import logger from "../shared/logger.ts";
 
 interface SharedProps {
   globalCount: bigint;
@@ -61,7 +62,7 @@ export default function Counter(props: SharedProps) {
     // an average clicks per second for a human is 6.5 clicks per second (CPS) but can go up to 10 CPS.
     // ignore if its more than 10 CPS
     if (now - lastEvt < 100) {
-      console.warn("Possible automation detected. Not counting.");
+      logger.warn("Possible automation detected. Not counting.");
       return;
     }
 
@@ -89,18 +90,14 @@ export default function Counter(props: SharedProps) {
     clearTimeout(timer);
     setTimer(setTimeout(() => {
       if (internalCount === Number.MAX_SAFE_INTEGER) {
-        console.warn(
+        logger.warn(
           "Data too large to be submitted and represented safely. Disposing.",
         );
         setCount(0);
         setInternalCount(0);
       } else {
         ipc.postMessage(internalCount + 1);
-        console.info(
-          `[${new Date().toISOString()}] Updating global count: ${
-            internalCount + 1
-          }`,
-        );
+        logger.info(`Updating global count: ${internalCount + 1}`);
         setInternalCount(0);
       }
     }, 2048));
@@ -112,7 +109,7 @@ export default function Counter(props: SharedProps) {
         handleClick(e);
         break;
       default:
-        console.warn(
+        logger.warn(
           "WARN: Attempted to interact while the socket is not ready!",
         );
         reconnect();
@@ -121,7 +118,7 @@ export default function Counter(props: SharedProps) {
   };
 
   const reconnect = () => {
-    console.log("Attempting to reconnect...");
+    logger.info("Attempting to reconnect...");
     let delay = 5000; // start with 5 seconds
     const maxDelay = 60000; // maximum delay of 60 seconds
 
@@ -132,13 +129,13 @@ export default function Counter(props: SharedProps) {
       handleWSEvents(ws);
 
       ws.onopen = () => {
-        console.log("Reconnected successfully.");
+        logger.info("Reconnected successfully.");
         delay = 5000; // reset delay on successful connection
         setSocketState(1);
       };
 
       ws.onerror = () => {
-        console.warn(
+        logger.warn(
           `Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`,
         );
         setTimeout(attemptReconnect, delay);
@@ -149,7 +146,7 @@ export default function Counter(props: SharedProps) {
     try {
       setTimeout(attemptReconnect, delay);
     } catch {
-      console.warn(
+      logger.warn(
         `Reconnect attempt failed. Retrying in ${delay / 1000} seconds...`,
       );
       delay = Math.min(delay * 2, maxDelay);
@@ -165,7 +162,7 @@ export default function Counter(props: SharedProps) {
     };
 
     const tmFunc = () => {
-      console.warn("Server is down, reconnecting...");
+      logger.warn("Server is down, reconnecting...");
       ws.close();
       reconnect();
     };
@@ -174,9 +171,7 @@ export default function Counter(props: SharedProps) {
     let tm = setTimeout(tmFunc, 30000);
 
     ws.onopen = () => {
-      console.log(
-        `[${new Date().toISOString()}] Connected to statistics socket`,
-      );
+      logger.info("Connected to statistics socket");
       setSocketState(1);
       ws.send((0x0).toString());
     };
@@ -199,7 +194,7 @@ export default function Counter(props: SharedProps) {
 
     ws.onclose = () => {
       setSocketState(3);
-      console.warn(
+      logger.warn(
         `[${new Date().toISOString()}] Disconnected from statistics socket.`,
       );
       reconnect();
@@ -207,13 +202,13 @@ export default function Counter(props: SharedProps) {
 
     ws.onerror = (e) => {
       setSocketState(3);
-      console.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
+      logger.error(`[${new Date().toISOString()}] Socket Errored. ${e.type}`);
       reconnect();
     };
   };
 
   useEffect(() => {
-    let ws = new WebSocket(
+    const ws = new WebSocket(
       globalThis.window.location.href.replace("http", "ws"),
     );
     setSocketState(1);
@@ -225,32 +220,16 @@ export default function Counter(props: SharedProps) {
       if (
         e.data < 0 || Number.isNaN(e.data) || e.data >= Number.MAX_SAFE_INTEGER
       ) {
-        console.warn("Unsafe data received. Ignoring.");
+        logger.warn("Unsafe data received. Ignoring.");
       } else {
         ws!.send(JSON.stringify({ data: e.data }));
       }
     });
-
-    const onlineHandler = () => {
-      console.log("Client detected online, resuming connection.");
-      ws = new WebSocket(globalThis.window.location.href.replace("http", "ws"));
-      handleWSEvents(ws);
-    };
-
-    const offlineHandler = () => {
-      console.warn("Client detected offline!");
-      ws!.close();
-    };
-
-    globalThis.window.addEventListener("online", onlineHandler);
-    globalThis.window.addEventListener("offline", offlineHandler);
     globalThis.window.addEventListener("beforeunload", () => {
       ws!.close();
     });
 
     return () => {
-      globalThis.window.removeEventListener("online", onlineHandler);
-      globalThis.window.removeEventListener("offline", offlineHandler);
       handleWSEvents(ws!);
       ws!.close();
     };
