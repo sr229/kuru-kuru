@@ -15,6 +15,9 @@
   "lib": { "deno.unstable": true },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
+    "@fingerprintjs/fingerprintjs": "npm:@fingerprintjs/fingerprintjs@^4.5.1",
+    "@std/crypto": "jsr:@std/crypto@^1.0.4",
+    "fresh-session": "jsr:@5t111111/fresh-session@^0.1.13",
     "preact": "npm:preact@10.22.0",
     "preact/": "npm:/preact@10.22.0/",
     "preact-render-to-string": "npm:preact-render-to-string@6.2.2",
