@@ -21,8 +21,22 @@ export const handler: Handlers = {
   GET: async (req, ctx) => {
     let bc = new BroadcastChannel("global-count");
     const headers = req.headers;
+    // deno-lint-ignore no-explicit-any
+    const session: any = ctx.state.session;
+
+    if (/x-herta-clientid=(\w\d)/gi.test(headers.get("Cookie")!)) {
+      return new Response("Missing or invalid visitor ID.", {
+        status: 403
+      });
+    }
+
+    // we might actually operate this behind a proxy which might inject their own cookies, so we want to precisely look for it
+    let hertaCookie = headers.get("Cookie")?.includes("x-herta-clientid");
+
+      session.set("clientid", headers.get("Cookie")?.split("=")[1]);
 
     // check if we're requesting wss:// or ws://, then upgrade as necessary
+    // check if  our session didn't expire too.
     if (headers.get("upgrade") === "websocket") {
       const { socket, response } = Deno.upgradeWebSocket(req);
 
