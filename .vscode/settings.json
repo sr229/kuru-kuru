@@ -16,5 +16,7 @@
   },
   "css.customData": [
     ".vscode/tailwind.json"
-  ]
+  ],
+  "IDX.aI.enableInlineCompletion": true,
+  "IDX.aI.enableCodebaseIndexing": true
 }

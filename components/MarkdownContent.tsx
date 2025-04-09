@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 import { CSS, render } from "$gfm";
 import { JSX } from "preact/jsx-runtime";
 

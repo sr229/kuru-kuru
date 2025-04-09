@@ -1,3 +1,4 @@
+// deno-lint-ignore-file react-no-danger
 import { PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import Footer from "../components/Footer.tsx";
