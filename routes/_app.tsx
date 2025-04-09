@@ -32,7 +32,7 @@ export default function App({ Component }: PageProps) {
         />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
-        <meta name="canonical" content="https://herta.us.kg/" />
+        <meta name="canonical" content="https://herta.cosyne.jp.eu.org/" />
         {/* Most Ko-fi widget sucks so we'll arbitrarily use the floating chat widget */}
         <div
           dangerouslySetInnerHTML={{

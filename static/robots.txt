@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://herta.us.kg/sitemap.xml 
+Sitemap: https://herta.cosyne.jp.eu.org/sitemap.xml 
