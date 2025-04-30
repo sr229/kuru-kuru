@@ -1,6 +1,7 @@
 import { Button } from "../components/Button.tsx";
 import { useEffect, useState } from "preact/hooks";
 import logger from "../shared/logger.ts";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 interface SharedProps {
   globalCount: bigint;
@@ -208,8 +209,21 @@ export default function Counter(props: SharedProps) {
   };
 
   useEffect(() => {
+    const generateVisitorId = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+
+      globalThis.window.localStorage.setItem("hertaClientID", result.visitorId);
+      document.cookie = `x-herta-clientid=${globalThis.window.localStorage.getItem("hertaClientID")}`;
+    }
+
+    if (!globalThis.window.localStorage.getItem("hertaClientID")) {
+      generateVisitorId();
+    }
+
     const ws = new WebSocket(
       globalThis.window.location.href.replace("http", "ws"),
+      []
     );
     setSocketState(1);
 
