@@ -9,8 +9,7 @@
 </a>
 [![Made with Fresh](https://fresh.deno.dev/fresh-badge.svg)](https://fresh.deno.dev)
 
-[Visit the Site](https://herta.deno.dev/) |
-[Check who's visiting it too!](https://takeback.bysourfruit.com/tracked/herta.deno.dev)
+[Visit the Site](https://herta.deno.dev/)
 
 This is a proof-of-concept implementation of
 [duiqt/herta_kuru](https://github.com/duiqt/herta_kuru) with a global statistics
