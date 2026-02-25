@@ -10,5 +10,8 @@ export async function setGlobalStatistics(value: number) {
   const pv = await getGlobalStatistics();
   const newValue = pv + value;
   // clamp to MAX_SAFE_INTEGER to prevent overflow
-  await kv.set(["global-statistics"], Math.min(newValue, Number.MAX_SAFE_INTEGER));
+  await kv.set(
+    ["global-statistics"],
+    Math.min(newValue, Number.MAX_SAFE_INTEGER),
+  );
 }
