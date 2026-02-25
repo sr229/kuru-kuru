@@ -89,7 +89,7 @@ export default function Counter(props: SharedProps) {
 
     clearTimeout(timer);
     setTimer(setTimeout(() => {
-      if (internalCount === Number.MAX_SAFE_INTEGER) {
+      if (internalCount >= Number.MAX_SAFE_INTEGER) {
         logger.warn(
           "Data too large to be submitted and represented safely. Disposing.",
         );
@@ -187,7 +187,7 @@ export default function Counter(props: SharedProps) {
           break;
         default: {
           const data = JSON.parse(e.data);
-          setGlobalCount(BigInt(parseInt(data.globalCount)));
+          setGlobalCount(BigInt(data.globalCount));
         }
       }
     };

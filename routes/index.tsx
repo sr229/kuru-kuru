@@ -56,14 +56,15 @@ export const handler: Handlers = {
 
           // check against MAX_SAFE_INTEGER. Ignore if it's larger than that
           if (
-            reqNewCount.data >= Number.MAX_SAFE_INTEGER &&
-            Number.isNaN(reqNewCount)
+            reqNewCount.data >= Number.MAX_SAFE_INTEGER ||
+            Number.isNaN(reqNewCount.data)
           ) {
             console.warn(
               `[${
                 new Date().toISOString()
               }] Unsafe data received from ${ctx.remoteAddr}. Ignoring.`,
             );
+            return;
           }
           // check if the data is negative. Ignore if it is
           if (reqNewCount.data < 0) {
@@ -72,6 +73,7 @@ export const handler: Handlers = {
                 new Date().toISOString()
               }] Negative data received from ${ctx.remoteAddr}. Is this an attack?`,
             );
+            return;
           }
 
           await setGlobalStatistics(reqNewCount.data);
