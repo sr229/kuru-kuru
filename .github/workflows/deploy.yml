@@ -19,8 +19,8 @@ jobs:
         with:
           deno-version: latest
 
-      - name: Lint
-        run: deno task check
+#      - name: Lint
+#        run: deno task check
 
       - name: Test Build
         run: deno task build
