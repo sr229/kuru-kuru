@@ -15,15 +15,15 @@
   "lib": { "deno.unstable": true },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
-    "preact": "npm:preact@10.22.0",
-    "preact/": "npm:/preact@10.22.0/",
+    "preact": "https://esm.sh/preact@10.22.0",
+    "preact/": "https://esm.sh/preact@10.22.0/",
     "preact-render-to-string": "npm:preact-render-to-string@6.2.2",
     "@preact/signals": "npm:@preact/signals@1.2.2",
     "@preact/signals-core": "npm:@preact/signals-core@1.5.1",
     "$gfm": "jsr:@deno/gfm",
     "tailwindcss": "npm:tailwindcss@3.3.5",
-    "tailwindcss/": "npm:/tailwindcss@3.3.5/",
-    "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js"
+    "tailwindcss/": "npm:tailwindcss@3.3.5/",
+    "tailwindcss/plugin": "npm:tailwindcss@3.3.5/plugin.js"
   },
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" }
 }
